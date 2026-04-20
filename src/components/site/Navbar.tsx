@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { BookOpen, Menu, X } from "lucide-react";
 
 const links = [
@@ -13,46 +13,36 @@ const links = [
 ] as const;
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Smoothly interpolate from translucent navy → opaque navy as user scrolls 0 → 60px
+  const bg = useTransform(
+    scrollY,
+    [0, 60],
+    ["rgba(11, 31, 75, 0.75)", "rgba(11, 31, 75, 1)"]
+  );
+  const blur = useTransform(scrollY, [0, 60], ["blur(20px)", "blur(28px)"]);
+  const shadow = useTransform(
+    scrollY,
+    [0, 60],
+    ["0 1px 0 rgba(255,255,255,0.06)", "0 10px 30px rgba(0,0,0,0.25)"]
+  );
 
   useEffect(() => setOpen(false), [location.pathname]);
 
-  const isDark = scrolled;
-
   return (
     <motion.header
-      initial={false}
-      animate={{
-        backgroundColor: isDark ? "rgba(11,31,75,0.97)" : "rgba(255,255,255,0)",
-        backdropFilter: isDark ? "blur(14px)" : "blur(0px)",
-        boxShadow: isDark ? "0 8px 30px rgba(0,0,0,0.18)" : "0 0 0 rgba(0,0,0,0)",
-      }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-x-0 top-0 z-50"
+      style={{ backgroundColor: bg, backdropFilter: blur, WebkitBackdropFilter: blur, boxShadow: shadow }}
+      className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.08]"
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <span
-            className={`flex size-9 items-center justify-center rounded-md ${
-              isDark ? "bg-brand-red text-white" : "bg-navy text-white"
-            }`}
-          >
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="flex size-9 items-center justify-center rounded-md bg-brand-red text-white shadow-lg shadow-brand-red/30">
             <BookOpen className="size-5" />
           </span>
-          <span
-            className={`font-serif text-xl font-bold tracking-tight ${
-              isDark ? "text-white" : "text-navy"
-            }`}
-          >
+          <span className="font-display text-xl font-bold tracking-tight text-white">
             American Writers Hub
           </span>
         </Link>
@@ -64,17 +54,14 @@ export function Navbar() {
               <li key={l.to}>
                 <Link
                   to={l.to}
-                  className={`relative text-sm font-medium transition-colors ${
-                    isDark ? "text-white/85 hover:text-white" : "text-navy/80 hover:text-navy"
-                  }`}
+                  className="group relative inline-block py-1 text-sm font-medium text-white/85 transition-colors hover:text-white"
                 >
                   {l.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-underline"
-                      className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-brand-red"
-                    />
-                  )}
+                  <span
+                    className={`absolute -bottom-0.5 left-0 h-0.5 w-full origin-left bg-brand-red transition-transform duration-300 ease-out ${
+                      active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
                 </Link>
               </li>
             );
@@ -84,7 +71,7 @@ export function Navbar() {
         <div className="hidden lg:block">
           <Link
             to="/get-published"
-            className="inline-flex items-center rounded-full bg-brand-red px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-red/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-red/40"
+            className="btn-uppercase glare glare-fast inline-flex items-center rounded-full bg-brand-red px-5 py-2.5 text-xs text-white shadow-lg shadow-brand-red/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_0_3px_rgba(139,26,43,0.35)]"
           >
             Start Your Book
           </Link>
@@ -93,7 +80,7 @@ export function Navbar() {
         <button
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
-          className={`lg:hidden ${isDark ? "text-white" : "text-navy"}`}
+          className="text-white lg:hidden"
         >
           {open ? <X className="size-6" /> : <Menu className="size-6" />}
         </button>
@@ -122,7 +109,7 @@ export function Navbar() {
               <li className="pt-2">
                 <Link
                   to="/get-published"
-                  className="block rounded-full bg-brand-red px-5 py-3 text-center text-sm font-semibold text-white"
+                  className="btn-uppercase block rounded-full bg-brand-red px-5 py-3 text-center text-xs text-white"
                 >
                   Start Your Book
                 </Link>

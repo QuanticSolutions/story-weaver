@@ -98,16 +98,20 @@ export function Footer() {
           </h4>
           <ul className="mt-5 space-y-3 text-sm">
             <li className="flex items-center gap-2.5">
-              <MapPin className="size-4 text-brand-red" /> United States
+              <MapPin className="size-4 text-brand-red" />
+              <span>United States</span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Mail className="size-4 text-brand-red" /> info@americanwritershub.com
+              <Mail className="size-4 text-brand-red" />
+              <span>info@americanwritershub.com</span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Phone className="size-4 text-brand-red" /> +1 (800) 000-0000
+              <Phone className="size-4 text-brand-red" />
+              <span>+1 (800) 000-0000</span>
             </li>
             <li className="flex items-center gap-2.5">
-              <MessageCircle className="size-4 text-brand-red" /> Live Chat Available
+              <MessageCircle className="size-4 text-brand-red" />
+              <span>Live Chat Available</span>
             </li>
           </ul>
         </div>

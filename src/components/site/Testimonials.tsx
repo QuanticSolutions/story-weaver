@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Play, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { FloatingOrbs } from "./FloatingOrbs";
+import { SectionTitle } from "./SectionTitle";
 
 const videos = [
   { author: "Sarah Linwood", book: "The Last Cartographer" },
@@ -41,31 +42,22 @@ export function Testimonials() {
   };
 
   return (
-    <section className="navy-hero-bg grain-overlay relative overflow-hidden py-24">
+    <section className="navy-hero-bg grain-overlay relative overflow-hidden py-28">
       <FloatingOrbs />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-3xl text-center"
-        >
-          <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-brand-red">
-            Testimonials
-          </span>
-          <h2 className="mt-3 font-serif text-4xl font-bold text-balance text-white md:text-5xl">
-            What Our Authors Say
-          </h2>
-          <p className="mt-4 text-white/70">
-            Real stories from real authors we've helped publish.
-          </p>
-        </motion.div>
+        <div className="flex justify-center">
+          <SectionTitle
+            eyebrow="Testimonials"
+            title="What Our Authors Say"
+            subtitle="Real stories from real authors we've helped publish."
+            variant="dark"
+          />
+        </div>
 
         {/* Video slider */}
-        <div className="mt-12">
+        <div className="mt-14">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-serif text-xl text-white">Video Testimonials</h3>
+            <h3 className="font-display text-2xl font-semibold text-white">Video Testimonials</h3>
             <div className="flex gap-2">
               <button
                 onClick={() => scroll(-1)}
@@ -91,7 +83,7 @@ export function Testimonials() {
               <motion.div
                 key={v.author}
                 whileHover={{ y: -4 }}
-                className="glass-light min-w-[300px] snap-start overflow-hidden rounded-2xl sm:min-w-[360px]"
+                className="glass-light glare min-w-[300px] snap-start overflow-hidden rounded-[20px] sm:min-w-[360px]"
               >
                 <div className="relative aspect-video bg-gradient-to-br from-navy to-brand-red">
                   <button
@@ -102,8 +94,8 @@ export function Testimonials() {
                   </button>
                 </div>
                 <div className="p-5">
-                  <p className="font-serif text-lg font-semibold text-white">{v.author}</p>
-                  <p className="text-sm text-white/65">{v.book}</p>
+                  <p className="font-display text-xl font-semibold text-white">{v.author}</p>
+                  <p className="text-sm italic text-white/65">{v.book}</p>
                 </div>
               </motion.div>
             ))}
@@ -116,30 +108,47 @@ export function Testimonials() {
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-          className="mt-14 grid gap-6 md:grid-cols-3"
+          className="mt-16 grid gap-6 md:grid-cols-3"
         >
           {reviews.map((r) => (
             <motion.div
               key={r.name}
               variants={{
-                hidden: { opacity: 0, y: 30 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                hidden: { opacity: 0, y: 40, scale: 0.96 },
+                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55 } },
               }}
-              className="glass-light rounded-2xl p-6"
+              whileHover={{ y: -6 }}
+              className="glare relative rounded-[20px] border border-white/[0.12] p-7 transition-colors duration-500 hover:border-brand-red/40"
+              style={{
+                background: "rgba(255,255,255,0.07)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+              }}
             >
-              <div className="flex gap-1 text-brand-red">
+              {/* Big decorative quote */}
+              <span
+                aria-hidden
+                className="absolute -left-1 -top-6 font-display leading-none text-brand-red/20 select-none"
+                style={{ fontSize: 96, fontWeight: 700 }}
+              >
+                “
+              </span>
+
+              <div className="relative flex gap-1 text-brand-red">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="size-4 fill-current" />
                 ))}
               </div>
-              <p className="mt-4 italic text-white/85">"{r.quote}"</p>
-              <div className="mt-5 flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-full bg-brand-red/30 font-serif text-sm font-bold text-white">
+              <p className="relative mt-4 italic leading-relaxed text-white/85">
+                {r.quote}
+              </p>
+              <div className="relative mt-6 flex items-center gap-3 border-t border-white/10 pt-4">
+                <div className="flex size-11 items-center justify-center rounded-full bg-navy font-display text-base font-bold text-white">
                   {r.name[0]}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">{r.name}</p>
-                  <p className="text-xs text-white/60">{r.book}</p>
+                  <p className="font-accent text-sm font-semibold text-white">{r.name}</p>
+                  <p className="text-xs italic text-white/60">{r.book}</p>
                 </div>
               </div>
             </motion.div>
