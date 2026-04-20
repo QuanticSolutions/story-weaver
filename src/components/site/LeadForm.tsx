@@ -24,8 +24,8 @@ export function LeadForm({
 
   const titleClass =
     variant === "light"
-      ? "font-serif text-2xl font-bold text-navy"
-      : "font-serif text-2xl font-bold text-white";
+      ? "font-display text-3xl font-bold text-navy"
+      : "font-display text-3xl font-bold text-white";
 
   const subtleClass = variant === "light" ? "text-navy/60" : "text-white/70";
 
@@ -65,7 +65,7 @@ export function LeadForm({
         </label>
         <button
           type="submit"
-          className="w-full rounded-lg bg-brand-red py-3 text-sm font-semibold text-white shadow-lg shadow-brand-red/30 transition hover:-translate-y-0.5 hover:bg-brand-red-dark"
+          className="btn-uppercase glare glare-fast w-full rounded-lg bg-brand-red py-3.5 text-xs text-white shadow-lg shadow-brand-red/30 transition hover:-translate-y-0.5 hover:shadow-[0_0_0_3px_rgba(139,26,43,0.35),0_10px_30px_rgba(139,26,43,0.4)]"
         >
           {cta}
         </button>
