@@ -93,6 +93,15 @@ export function ProcessSection() {
             })}
           </div>
 
+          {/* Progress bar */}
+          <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-white/10">
+            <motion.div
+              className="h-full rounded-full bg-brand-red"
+              animate={{ width: `${((active + 1) / steps.length) * 100}%` }}
+              transition={{ type: "spring", stiffness: 120, damping: 22 }}
+            />
+          </div>
+
           <div className="relative mt-12 min-h-[260px]">
             <AnimatePresence mode="wait">
               <motion.div
