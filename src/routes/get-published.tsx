@@ -14,6 +14,7 @@ import { FloatingOrbs } from "@/components/site/FloatingOrbs";
 import { LeadForm } from "@/components/site/LeadForm";
 import { PlatformMarquee } from "@/components/site/PlatformMarquee";
 import { MidLeadCTA, FinalCTA } from "@/components/site/CTASections";
+import { PublishStickyScroll } from "@/components/site/PublishStickyScroll";
 
 export const Route = createFileRoute("/get-published")({
   head: () => ({
@@ -157,37 +158,7 @@ function GetPublishedPage() {
       </section>
 
       {/* Step-by-step timeline */}
-      <section className="bg-offwhite py-20">
-        <div className="mx-auto max-w-5xl px-5 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-serif text-4xl font-bold text-navy md:text-5xl">Step-by-Step Publishing Process</h2>
-            <p className="mt-4 text-navy/65">A transparent journey from first contact to global launch.</p>
-          </div>
-          <ol className="relative mt-14 space-y-10 before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-brand-red/30 md:before:left-1/2 md:before:-ml-px">
-            {stepsTimeline.map((s, i) => {
-              const left = i % 2 === 0;
-              return (
-                <motion.li
-                  key={s.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5 }}
-                  className="relative md:grid md:grid-cols-2 md:gap-10"
-                >
-                  <div className="absolute left-6 top-1 z-10 flex size-12 -translate-x-1/2 items-center justify-center rounded-full bg-brand-red font-serif text-lg font-bold text-white shadow-lg md:left-1/2">
-                    {i + 1}
-                  </div>
-                  <div className={`pl-20 md:pl-0 ${left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}`}>
-                    <h3 className="font-serif text-2xl font-bold text-navy">{s.title}</h3>
-                    <p className="mt-2 text-navy/70">{s.desc}</p>
-                  </div>
-                </motion.li>
-              );
-            })}
-          </ol>
-        </div>
-      </section>
+      <PublishStickyScroll />
 
       {/* Genres */}
       <section className="bg-white py-20">

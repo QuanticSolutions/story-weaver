@@ -5,8 +5,8 @@ import { ArrowRight } from "lucide-react";
 import { FloatingOrbs } from "@/components/site/FloatingOrbs";
 import { LeadForm } from "@/components/site/LeadForm";
 import { PlatformMarquee } from "@/components/site/PlatformMarquee";
-import { ServicesGrid } from "@/components/site/ServicesGrid";
-import { ProcessSection } from "@/components/site/ProcessSection";
+import { ServicesStickyScroll } from "@/components/site/ServicesStickyScroll";
+import { ProcessStickyScroll } from "@/components/site/ProcessStickyScroll";
 import { PortfolioGrid } from "@/components/site/PortfolioGrid";
 import { Testimonials } from "@/components/site/Testimonials";
 import { MidLeadCTA, FinalCTA } from "@/components/site/CTASections";
@@ -53,8 +53,8 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <ServicesGrid />
-      <ProcessSection />
+      <ServicesStickyScroll />
+      <ProcessStickyScroll />
       <MidLeadCTA />
       <section className="paper-grain relative overflow-hidden bg-offwhite py-28">
         <LightSectionDecor />
