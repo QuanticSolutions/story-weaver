@@ -69,9 +69,8 @@ export const MacbookScroll = ({
       className="flex min-h-[200vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-80"
     >
       <motion.h2
-        style={{ translateY: textTransform, opacity: textOpacity }}
+        style={{ translateY: textTransform, opacity: textOpacity, fontFamily: '"Cormorant Garamond", serif' }}
         className="mb-20 text-center text-3xl font-bold text-white"
-        style-fontFamily='"Cormorant Garamond", serif'
       >
         {title || "Your scroll-driven hero."}
       </motion.h2>
