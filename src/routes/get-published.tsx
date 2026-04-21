@@ -15,6 +15,7 @@ import { LeadForm } from "@/components/site/LeadForm";
 import { PlatformMarquee } from "@/components/site/PlatformMarquee";
 import { MidLeadCTA, FinalCTA } from "@/components/site/CTASections";
 import { PublishStickyScroll } from "@/components/site/PublishStickyScroll";
+import { PublishMacbookSection } from "@/components/site/PublishMacbookSection";
 
 export const Route = createFileRoute("/get-published")({
   head: () => ({
@@ -88,6 +89,8 @@ function GetPublishedPage() {
           <LeadForm />
         </div>
       </section>
+
+      <PublishMacbookSection />
 
       {/* Why Publish With Us */}
       <section className="bg-white py-20">

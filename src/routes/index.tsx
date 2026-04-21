@@ -13,6 +13,7 @@ import { MidLeadCTA, FinalCTA } from "@/components/site/CTASections";
 import { CounterStat } from "@/components/site/CounterStat";
 import { LightSectionDecor } from "@/components/site/LightSectionDecor";
 import { SectionTitle } from "@/components/site/SectionTitle";
+import { HomeMacbookSection } from "@/components/site/HomeMacbookSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +35,7 @@ function HomePage() {
   return (
     <>
       <Hero />
+      <HomeMacbookSection />
       <section className="relative overflow-hidden bg-white py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <p className="label-eyebrow text-center text-brand-red">
