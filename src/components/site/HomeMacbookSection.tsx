@@ -26,7 +26,7 @@ const screen = (
 
 export function HomeMacbookSection() {
   return (
-    <section className="relative overflow-hidden bg-[#0B1F4B]">
+    <section className="relative overflow-hidden bg-[#0B1F4B] pb-40 md:pb-64">
       <div className="mx-auto max-w-5xl px-5 pt-20 text-center lg:px-8">
         <span className="font-accent text-xs font-semibold uppercase tracking-[0.25em] text-brand-red">
           Trusted by 1,200+ Authors
