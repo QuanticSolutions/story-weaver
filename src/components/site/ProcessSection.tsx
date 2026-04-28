@@ -1,12 +1,5 @@
-import { useState, useRef } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-  type MotionValue,
-} from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import {
   PenLine,
@@ -42,72 +35,9 @@ const steps: Step[] = [
   { icon: Palette, title: "Illustrations (Optional)", desc: "For children's books, graphic novels, or illustrated non-fiction — our illustrators create original, custom artwork that matches your vision, style, and target readership.", cta: "View Illustration Work", href: "/portfolio" },
 ];
 
-function StickyStepCard({
-  index,
-  step,
-  progress,
-  totalCount,
-}: {
-  index: number;
-  step: Step;
-  progress: MotionValue<number>;
-  totalCount: number;
-}) {
-  // Each card occupies an equal slice of the scroll range.
-  // Card i starts shrinking when the next card begins.
-  const start = index / totalCount;
-  const end = (index + 1) / totalCount;
-  const targetScale = Math.max(0.85, 1 - (totalCount - index - 1) * 0.025);
-
-  const scale = useTransform(progress, [start, end], [1, targetScale]);
-  const Icon = step.icon;
-
-  return (
-    <div
-      className="sticky flex items-center justify-center"
-      style={{ top: `calc(20vh + ${index * 18}px)` }}
-    >
-      <motion.div
-        style={{ scale, transformOrigin: "top center" }}
-        className="glass-light grid w-full items-start gap-8 rounded-3xl p-8 md:p-10 md:grid-cols-[auto_1fr_auto]"
-      >
-        <div className="flex size-20 items-center justify-center rounded-2xl bg-brand-red text-white">
-          <Icon className="size-9" />
-        </div>
-        <div>
-          <p className="font-accent text-xs font-semibold uppercase tracking-widest text-brand-red">
-            Step {index + 1} of {totalCount}
-          </p>
-          <h3 className="mt-1 font-serif text-3xl font-bold text-white">
-            {step.title}
-          </h3>
-          <p className="mt-3 max-w-2xl text-white/75">{step.desc}</p>
-        </div>
-        <Link
-          to={step.href}
-          className="inline-flex items-center gap-2 self-center rounded-full bg-brand-red px-5 py-3 text-sm font-semibold text-white hover:bg-brand-red-dark"
-        >
-          {step.cta} <ArrowRight className="size-4" />
-        </Link>
-      </motion.div>
-    </div>
-  );
-}
-
 export function ProcessSection() {
   const [active, setActive] = useState(0);
   const [openMobile, setOpenMobile] = useState<number | null>(0);
-
-  const stackRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: stackRef,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const idx = Math.min(steps.length - 1, Math.max(0, Math.floor(v * steps.length)));
-    setActive(idx);
-  });
 
   return (
     <section className="navy-hero-bg grain-overlay relative overflow-hidden py-24">
@@ -131,76 +61,80 @@ export function ProcessSection() {
           </p>
         </motion.div>
 
-        {/* Desktop: sticky tabs + stacking cards */}
+        {/* Desktop tabs */}
         <div className="mt-14 hidden lg:block">
-          <div className="sticky top-20 z-20 -mx-5 bg-[#0B1F4B]/80 px-5 pt-4 pb-2 backdrop-blur-xl lg:-mx-8 lg:px-8">
-            <div className="flex flex-wrap justify-center gap-2 border-b border-white/10 pb-1">
-              {steps.map((s, i) => {
-                const isActive = i === active;
-                return (
-                  <button
-                    key={s.title}
-                    onClick={() => {
-                      // scroll to the corresponding card
-                      const el = stackRef.current;
-                      if (!el) return;
-                      const rect = el.getBoundingClientRect();
-                      const totalScrollable = rect.height - window.innerHeight;
-                      const target =
-                        window.scrollY +
-                        rect.top +
-                        (i / steps.length) * totalScrollable +
-                        1;
-                      window.scrollTo({ top: target, behavior: "smooth" });
-                    }}
-                    className="relative px-4 py-3 text-sm transition-colors"
+          <div className="flex flex-wrap justify-center gap-2 border-b border-white/10 pb-1">
+            {steps.map((s, i) => {
+              const isActive = i === active;
+              return (
+                <button
+                  key={s.title}
+                  onClick={() => setActive(i)}
+                  className="relative px-4 py-3 text-sm transition-colors"
+                >
+                  <span
+                    className={`mr-2 font-serif text-lg ${
+                      isActive ? "text-brand-red" : "text-white/40"
+                    }`}
                   >
-                    <span
-                      className={`mr-2 font-serif text-lg ${
-                        isActive ? "text-brand-red" : "text-white/40"
-                      }`}
-                    >
-                      0{i + 1}
-                    </span>
-                    <span className={isActive ? "text-white" : "text-white/60"}>
-                      {s.title.replace(" (Optional)", "")}
-                    </span>
-                    {isActive && (
-                      <motion.span
-                        layoutId="process-underline"
-                        className="absolute -bottom-px left-2 right-2 h-0.5 bg-brand-red"
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Progress bar */}
-            <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-white/10">
-              <motion.div
-                className="h-full rounded-full bg-brand-red"
-                animate={{ width: `${((active + 1) / steps.length) * 100}%` }}
-                transition={{ type: "spring", stiffness: 120, damping: 22 }}
-              />
-            </div>
+                    0{i + 1}
+                  </span>
+                  <span className={isActive ? "text-white" : "text-white/60"}>
+                    {s.title.replace(" (Optional)", "")}
+                  </span>
+                  {isActive && (
+                    <motion.span
+                      layoutId="process-underline"
+                      className="absolute -bottom-px left-2 right-2 h-0.5 bg-brand-red"
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Stacking cards container — tall to allow scroll-driven stacking */}
-          <div
-            ref={stackRef}
-            className="relative mt-10"
-            style={{ height: `${steps.length * 90}vh` }}
-          >
-            {steps.map((s, i) => (
-              <StickyStepCard
-                key={s.title}
-                index={i}
-                step={s}
-                progress={scrollYProgress}
-                totalCount={steps.length}
-              />
-            ))}
+          {/* Progress bar */}
+          <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-white/10">
+            <motion.div
+              className="h-full rounded-full bg-brand-red"
+              animate={{ width: `${((active + 1) / steps.length) * 100}%` }}
+              transition={{ type: "spring", stiffness: 120, damping: 22 }}
+            />
+          </div>
+
+          <div className="relative mt-12 min-h-[260px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ x: 60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -60, opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                className="glass-light grid items-start gap-8 rounded-3xl p-10 md:grid-cols-[auto_1fr_auto]"
+              >
+                <div className="flex size-20 items-center justify-center rounded-2xl bg-brand-red text-white">
+                  {(() => {
+                    const Icon = steps[active].icon;
+                    return <Icon className="size-9" />;
+                  })()}
+                </div>
+                <div>
+                  <p className="font-accent text-xs font-semibold uppercase tracking-widest text-brand-red">
+                    Step {active + 1} of 8
+                  </p>
+                  <h3 className="mt-1 font-serif text-3xl font-bold text-white">
+                    {steps[active].title}
+                  </h3>
+                  <p className="mt-3 max-w-2xl text-white/75">{steps[active].desc}</p>
+                </div>
+                <Link
+                  to={steps[active].href}
+                  className="inline-flex items-center gap-2 self-center rounded-full bg-brand-red px-5 py-3 text-sm font-semibold text-white hover:bg-brand-red-dark"
+                >
+                  {steps[active].cta} <ArrowRight className="size-4" />
+                </Link>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
 
