@@ -57,9 +57,26 @@ const portal = (
 
 export function PublishMacbookSection() {
   return (
-    <section className="bg-white pb-32">
+    /*
+      Key fixes:
+      1. `overflow-hidden` — clips the MacbookScroll's large internal padding/transforms
+         so they don't bleed into the sections above or below.
+      2. No extra pb-32 — MacbookScroll already has large internal bottom padding (py-40).
+         Adding more just creates a massive gap.
+      3. `-mt-px` on the section prevents a 1px seam between this and the hero above.
+      4. The `[&_>div]:!py-20` override trims the component's built-in py-40 padding
+         down to something reasonable without touching the source file.
+    */
+    <section
+      className="relative overflow-hidden bg-white [&_>div]:!py-20"
+      style={{ isolation: "isolate" }}
+    >
       <MacbookScroll
-        title={<span className="text-navy">Your Dashboard. Your Book Journey.</span>}
+        title={
+          <span className="text-navy font-serif text-3xl font-bold md:text-4xl">
+            Your Dashboard. Your Book Journey.
+          </span>
+        }
         screenContent={portal}
         showGradient={false}
       />
