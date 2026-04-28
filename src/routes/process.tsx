@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ProcessSection } from "@/components/site/ProcessSection";
+import { ProcessCardStack } from "@/components/site/ProcessCardStack";
 import { FinalCTA } from "@/components/site/CTASections";
 
 export const Route = createFileRoute("/process")({
@@ -18,7 +18,7 @@ function ProcessPage() {
   return (
     <>
       <div className="pt-20" />
-      <ProcessSection />
+      <ProcessCardStack />
       <FinalCTA />
     </>
   );
