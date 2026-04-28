@@ -57,7 +57,7 @@ const portal = (
 
 export function PublishMacbookSection() {
   return (
-    <section className="bg-white">
+    <section className="bg-white pb-32">
       <MacbookScroll
         title={<span className="text-navy">Your Dashboard. Your Book Journey.</span>}
         screenContent={portal}

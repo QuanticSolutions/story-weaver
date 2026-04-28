@@ -118,7 +118,7 @@ function GetPublishedPage() {
       </section>
 
       {/* Formats */}
-      <section className="bg-offwhite py-20">
+      <section className="bg-offwhite pt-32 pb-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-serif text-4xl font-bold text-navy md:text-5xl">What We Publish</h2>
