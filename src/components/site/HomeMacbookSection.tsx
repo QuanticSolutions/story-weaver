@@ -42,7 +42,7 @@ export function HomeMacbookSection() {
         </p>
       </div>
       <MacbookScroll
-        title={<span>Your Book. Published Everywhere.</span>}
+        title={null}
         screenContent={screen}
         showGradient={false}
       />
