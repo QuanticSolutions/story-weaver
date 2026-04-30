@@ -1,9 +1,11 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { LiveChat } from "@/components/site/LiveChat";
+import { PortalAuthProvider } from "@/context/PortalAuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -69,14 +71,24 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const location = useLocation();
+  const isPortal = location.pathname.startsWith("/portal");
+
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen">
+    <PortalAuthProvider>
+      {isPortal ? (
         <Outlet />
-      </main>
-      <Footer />
-      <LiveChat />
-    </>
+      ) : (
+        <>
+          <Navbar />
+          <main className="min-h-screen">
+            <Outlet />
+          </main>
+          <Footer />
+          <LiveChat />
+        </>
+      )}
+      <Toaster />
+    </PortalAuthProvider>
   );
 }

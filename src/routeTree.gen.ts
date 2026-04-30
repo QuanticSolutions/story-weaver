@@ -15,6 +15,15 @@ import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as GetPublishedRouteImport } from './routes/get-published'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
+import { Route as PortalProjectRouteImport } from './routes/portal.project'
+import { Route as PortalProfileRouteImport } from './routes/portal.profile'
+import { Route as PortalNotificationsRouteImport } from './routes/portal.notifications'
+import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
+import { Route as PortalLoginRouteImport } from './routes/portal.login'
+import { Route as PortalFilesRouteImport } from './routes/portal.files'
+import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
+import { Route as PortalBillingRouteImport } from './routes/portal.billing'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -46,6 +55,51 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/portal/',
+  path: '/portal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalProjectRoute = PortalProjectRouteImport.update({
+  id: '/portal/project',
+  path: '/portal/project',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalProfileRoute = PortalProfileRouteImport.update({
+  id: '/portal/profile',
+  path: '/portal/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalNotificationsRoute = PortalNotificationsRouteImport.update({
+  id: '/portal/notifications',
+  path: '/portal/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalMessagesRoute = PortalMessagesRouteImport.update({
+  id: '/portal/messages',
+  path: '/portal/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalLoginRoute = PortalLoginRouteImport.update({
+  id: '/portal/login',
+  path: '/portal/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalFilesRoute = PortalFilesRouteImport.update({
+  id: '/portal/files',
+  path: '/portal/files',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalDashboardRoute = PortalDashboardRouteImport.update({
+  id: '/portal/dashboard',
+  path: '/portal/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalBillingRoute = PortalBillingRouteImport.update({
+  id: '/portal/billing',
+  path: '/portal/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +108,15 @@ export interface FileRoutesByFullPath {
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/services': typeof ServicesRoute
+  '/portal/billing': typeof PortalBillingRoute
+  '/portal/dashboard': typeof PortalDashboardRoute
+  '/portal/files': typeof PortalFilesRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/messages': typeof PortalMessagesRoute
+  '/portal/notifications': typeof PortalNotificationsRoute
+  '/portal/profile': typeof PortalProfileRoute
+  '/portal/project': typeof PortalProjectRoute
+  '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +125,15 @@ export interface FileRoutesByTo {
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/services': typeof ServicesRoute
+  '/portal/billing': typeof PortalBillingRoute
+  '/portal/dashboard': typeof PortalDashboardRoute
+  '/portal/files': typeof PortalFilesRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/messages': typeof PortalMessagesRoute
+  '/portal/notifications': typeof PortalNotificationsRoute
+  '/portal/profile': typeof PortalProfileRoute
+  '/portal/project': typeof PortalProjectRoute
+  '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +143,15 @@ export interface FileRoutesById {
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/services': typeof ServicesRoute
+  '/portal/billing': typeof PortalBillingRoute
+  '/portal/dashboard': typeof PortalDashboardRoute
+  '/portal/files': typeof PortalFilesRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/messages': typeof PortalMessagesRoute
+  '/portal/notifications': typeof PortalNotificationsRoute
+  '/portal/profile': typeof PortalProfileRoute
+  '/portal/project': typeof PortalProjectRoute
+  '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +162,15 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/process'
     | '/services'
+    | '/portal/billing'
+    | '/portal/dashboard'
+    | '/portal/files'
+    | '/portal/login'
+    | '/portal/messages'
+    | '/portal/notifications'
+    | '/portal/profile'
+    | '/portal/project'
+    | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +179,15 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/process'
     | '/services'
+    | '/portal/billing'
+    | '/portal/dashboard'
+    | '/portal/files'
+    | '/portal/login'
+    | '/portal/messages'
+    | '/portal/notifications'
+    | '/portal/profile'
+    | '/portal/project'
+    | '/portal'
   id:
     | '__root__'
     | '/'
@@ -97,6 +196,15 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/process'
     | '/services'
+    | '/portal/billing'
+    | '/portal/dashboard'
+    | '/portal/files'
+    | '/portal/login'
+    | '/portal/messages'
+    | '/portal/notifications'
+    | '/portal/profile'
+    | '/portal/project'
+    | '/portal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +214,15 @@ export interface RootRouteChildren {
   PortfolioRoute: typeof PortfolioRoute
   ProcessRoute: typeof ProcessRoute
   ServicesRoute: typeof ServicesRoute
+  PortalBillingRoute: typeof PortalBillingRoute
+  PortalDashboardRoute: typeof PortalDashboardRoute
+  PortalFilesRoute: typeof PortalFilesRoute
+  PortalLoginRoute: typeof PortalLoginRoute
+  PortalMessagesRoute: typeof PortalMessagesRoute
+  PortalNotificationsRoute: typeof PortalNotificationsRoute
+  PortalProfileRoute: typeof PortalProfileRoute
+  PortalProjectRoute: typeof PortalProjectRoute
+  PortalIndexRoute: typeof PortalIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +269,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/': {
+      id: '/portal/'
+      path: '/portal'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/project': {
+      id: '/portal/project'
+      path: '/portal/project'
+      fullPath: '/portal/project'
+      preLoaderRoute: typeof PortalProjectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/profile': {
+      id: '/portal/profile'
+      path: '/portal/profile'
+      fullPath: '/portal/profile'
+      preLoaderRoute: typeof PortalProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/notifications': {
+      id: '/portal/notifications'
+      path: '/portal/notifications'
+      fullPath: '/portal/notifications'
+      preLoaderRoute: typeof PortalNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/messages': {
+      id: '/portal/messages'
+      path: '/portal/messages'
+      fullPath: '/portal/messages'
+      preLoaderRoute: typeof PortalMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/login': {
+      id: '/portal/login'
+      path: '/portal/login'
+      fullPath: '/portal/login'
+      preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/files': {
+      id: '/portal/files'
+      path: '/portal/files'
+      fullPath: '/portal/files'
+      preLoaderRoute: typeof PortalFilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/dashboard': {
+      id: '/portal/dashboard'
+      path: '/portal/dashboard'
+      fullPath: '/portal/dashboard'
+      preLoaderRoute: typeof PortalDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/billing': {
+      id: '/portal/billing'
+      path: '/portal/billing'
+      fullPath: '/portal/billing'
+      preLoaderRoute: typeof PortalBillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +342,15 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioRoute: PortfolioRoute,
   ProcessRoute: ProcessRoute,
   ServicesRoute: ServicesRoute,
+  PortalBillingRoute: PortalBillingRoute,
+  PortalDashboardRoute: PortalDashboardRoute,
+  PortalFilesRoute: PortalFilesRoute,
+  PortalLoginRoute: PortalLoginRoute,
+  PortalMessagesRoute: PortalMessagesRoute,
+  PortalNotificationsRoute: PortalNotificationsRoute,
+  PortalProfileRoute: PortalProfileRoute,
+  PortalProjectRoute: PortalProjectRoute,
+  PortalIndexRoute: PortalIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
