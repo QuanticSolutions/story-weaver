@@ -15,6 +15,7 @@ import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as GetPublishedRouteImport } from './routes/get-published'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as PortalProjectRouteImport } from './routes/portal.project'
 import { Route as PortalProfileRouteImport } from './routes/portal.profile'
 import { Route as PortalNotificationsRouteImport } from './routes/portal.notifications'
@@ -52,6 +53,11 @@ const ContactRoute = ContactRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/portal/',
+  path: '/portal/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalProjectRoute = PortalProjectRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/profile': typeof PortalProfileRoute
   '/portal/project': typeof PortalProjectRoute
+  '/portal/': typeof PortalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/profile': typeof PortalProfileRoute
   '/portal/project': typeof PortalProjectRoute
+  '/portal': typeof PortalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/portal/notifications': typeof PortalNotificationsRoute
   '/portal/profile': typeof PortalProfileRoute
   '/portal/project': typeof PortalProjectRoute
+  '/portal/': typeof PortalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/profile'
     | '/portal/project'
+    | '/portal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/profile'
     | '/portal/project'
+    | '/portal'
   id:
     | '__root__'
     | '/'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/portal/notifications'
     | '/portal/profile'
     | '/portal/project'
+    | '/portal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   PortalNotificationsRoute: typeof PortalNotificationsRoute
   PortalProfileRoute: typeof PortalProfileRoute
   PortalProjectRoute: typeof PortalProjectRoute
+  PortalIndexRoute: typeof PortalIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/': {
+      id: '/portal/'
+      path: '/portal'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal/project': {
@@ -330,6 +350,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalNotificationsRoute: PortalNotificationsRoute,
   PortalProfileRoute: PortalProfileRoute,
   PortalProjectRoute: PortalProjectRoute,
+  PortalIndexRoute: PortalIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
