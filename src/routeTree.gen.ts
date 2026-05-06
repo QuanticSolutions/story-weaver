@@ -24,6 +24,8 @@ import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as PortalFilesRouteImport } from './routes/portal.files'
 import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
 import { Route as PortalBillingRouteImport } from './routes/portal.billing'
+import { Route as CrmLoginRouteImport } from './routes/crm.login'
+import { Route as CrmDashboardRouteImport } from './routes/crm.dashboard'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -100,6 +102,16 @@ const PortalBillingRoute = PortalBillingRouteImport.update({
   path: '/portal/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CrmLoginRoute = CrmLoginRouteImport.update({
+  id: '/crm/login',
+  path: '/crm/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmDashboardRoute = CrmDashboardRouteImport.update({
+  id: '/crm/dashboard',
+  path: '/crm/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -108,6 +120,8 @@ export interface FileRoutesByFullPath {
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/services': typeof ServicesRoute
+  '/crm/dashboard': typeof CrmDashboardRoute
+  '/crm/login': typeof CrmLoginRoute
   '/portal/billing': typeof PortalBillingRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/portal/files': typeof PortalFilesRoute
@@ -125,6 +139,8 @@ export interface FileRoutesByTo {
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/services': typeof ServicesRoute
+  '/crm/dashboard': typeof CrmDashboardRoute
+  '/crm/login': typeof CrmLoginRoute
   '/portal/billing': typeof PortalBillingRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/portal/files': typeof PortalFilesRoute
@@ -143,6 +159,8 @@ export interface FileRoutesById {
   '/portfolio': typeof PortfolioRoute
   '/process': typeof ProcessRoute
   '/services': typeof ServicesRoute
+  '/crm/dashboard': typeof CrmDashboardRoute
+  '/crm/login': typeof CrmLoginRoute
   '/portal/billing': typeof PortalBillingRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/portal/files': typeof PortalFilesRoute
@@ -162,6 +180,8 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/process'
     | '/services'
+    | '/crm/dashboard'
+    | '/crm/login'
     | '/portal/billing'
     | '/portal/dashboard'
     | '/portal/files'
@@ -179,6 +199,8 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/process'
     | '/services'
+    | '/crm/dashboard'
+    | '/crm/login'
     | '/portal/billing'
     | '/portal/dashboard'
     | '/portal/files'
@@ -196,6 +218,8 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/process'
     | '/services'
+    | '/crm/dashboard'
+    | '/crm/login'
     | '/portal/billing'
     | '/portal/dashboard'
     | '/portal/files'
@@ -214,6 +238,8 @@ export interface RootRouteChildren {
   PortfolioRoute: typeof PortfolioRoute
   ProcessRoute: typeof ProcessRoute
   ServicesRoute: typeof ServicesRoute
+  CrmDashboardRoute: typeof CrmDashboardRoute
+  CrmLoginRoute: typeof CrmLoginRoute
   PortalBillingRoute: typeof PortalBillingRoute
   PortalDashboardRoute: typeof PortalDashboardRoute
   PortalFilesRoute: typeof PortalFilesRoute
@@ -332,6 +358,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalBillingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/crm/login': {
+      id: '/crm/login'
+      path: '/crm/login'
+      fullPath: '/crm/login'
+      preLoaderRoute: typeof CrmLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/dashboard': {
+      id: '/crm/dashboard'
+      path: '/crm/dashboard'
+      fullPath: '/crm/dashboard'
+      preLoaderRoute: typeof CrmDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -342,6 +382,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioRoute: PortfolioRoute,
   ProcessRoute: ProcessRoute,
   ServicesRoute: ServicesRoute,
+  CrmDashboardRoute: CrmDashboardRoute,
+  CrmLoginRoute: CrmLoginRoute,
   PortalBillingRoute: PortalBillingRoute,
   PortalDashboardRoute: PortalDashboardRoute,
   PortalFilesRoute: PortalFilesRoute,
@@ -355,3 +397,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
