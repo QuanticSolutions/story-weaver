@@ -90,26 +90,33 @@ function Card({ step }: { step: Step }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55 }}
-      className="rounded-[20px] border bg-[#FDFAF4] px-7 py-8 shadow-[0_8px_30px_rgba(11,31,75,0.06)] md:px-9"
-      style={{ borderColor: "rgba(201,168,76,0.35)", borderWidth: "1.5px" }}
+      className="rounded-[20px] border px-7 py-8 shadow-[0_8px_30px_rgba(11,31,75,0.10)] md:px-9"
+      style={{
+        background: "#f8f6f1",
+        borderColor: "rgba(155,35,53,0.25)",
+        borderWidth: "1.5px",
+      }}
     >
       <div className="flex items-center gap-4">
         <span
           className="font-serif text-4xl italic md:text-5xl"
-          style={{ color: "#C9A84C" }}
+          style={{ color: "#9b2335" }}
         >
           {step.num}
         </span>
-        <h3 className="font-serif text-2xl font-bold text-navy md:text-[26px]">
+        <h3
+          className="font-serif text-2xl font-bold md:text-[26px]"
+          style={{ color: "#0f1b2d" }}
+        >
           {step.title}
         </h3>
         {step.optional && (
           <span
             className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
             style={{
-              color: "#9C7A1F",
-              background: "rgba(201,168,76,0.12)",
-              border: "1px solid rgba(201,168,76,0.4)",
+              color: "#9b2335",
+              background: "rgba(155,35,53,0.08)",
+              border: "1px solid rgba(155,35,53,0.3)",
             }}
           >
             Optional
@@ -117,14 +124,20 @@ function Card({ step }: { step: Step }) {
         )}
       </div>
 
-      <p className="mt-4 text-[15px] leading-relaxed text-navy/65">{step.desc}</p>
+      <p className="mt-4 text-[15px] leading-relaxed" style={{ color: "rgba(15,27,45,0.65)" }}>
+        {step.desc}
+      </p>
 
       <div className="mt-5 flex flex-wrap gap-2">
         {step.tags.map((t) => (
           <span
             key={t}
-            className="rounded-full bg-[#FBF6E8] px-3 py-1 text-xs font-medium text-navy/75"
-            style={{ border: "1px solid rgba(201,168,76,0.35)" }}
+            className="rounded-full px-3 py-1 text-xs font-medium"
+            style={{
+              background: "rgba(155,35,53,0.06)",
+              color: "rgba(15,27,45,0.75)",
+              border: "1px solid rgba(155,35,53,0.2)",
+            }}
           >
             {t}
           </span>
@@ -135,7 +148,7 @@ function Card({ step }: { step: Step }) {
         <Link
           to="/portfolio"
           className="inline-flex items-center gap-1.5 text-sm font-semibold transition hover:gap-2.5"
-          style={{ color: "#9C7A1F" }}
+          style={{ color: "#9b2335" }}
         >
           View Work <ArrowRight className="size-4" />
         </Link>
@@ -154,10 +167,13 @@ function Connector({ Icon }: { Icon: LucideIcon }) {
       className="flex items-center justify-center"
     >
       <div
-        className="flex size-14 items-center justify-center rounded-full bg-white shadow-sm"
-        style={{ border: "1.5px solid rgba(201,168,76,0.5)" }}
+        className="flex size-14 items-center justify-center rounded-full shadow-sm"
+        style={{
+          background: "#0f1b2d",
+          border: "1.5px solid rgba(155,35,53,0.5)",
+        }}
       >
-        <Icon className="size-6" style={{ color: "#C9A84C" }} />
+        <Icon className="size-6" style={{ color: "#9b2335" }} />
       </div>
     </motion.div>
   );
@@ -165,16 +181,25 @@ function Connector({ Icon }: { Icon: LucideIcon }) {
 
 export function PublishingJourney() {
   return (
-    <section className="bg-white py-24">
+    <section className="py-24" style={{ background: "#ffffff" }}>
       <div className="mx-auto max-w-6xl px-5 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
+          <span
+            className="text-xs font-semibold uppercase tracking-[0.2em]"
+            style={{ color: "#9b2335" }}
+          >
+            Our Process
+          </span>
           <h2
-            className="font-serif text-4xl font-bold text-navy md:text-6xl"
-            style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif' }}
+            className="mt-3 font-serif text-4xl font-bold md:text-6xl"
+            style={{
+              color: "#0f1b2d",
+              fontFamily: '"Playfair Display", "Cormorant Garamond", serif',
+            }}
           >
             Your Publishing Journey
           </h2>
-          <p className="mt-5 text-lg text-navy/55">
+          <p className="mt-5 text-lg" style={{ color: "rgba(15,27,45,0.55)" }}>
             A proven, end-to-end process — from the first spark of your idea to your book on
             shelves worldwide.
           </p>
@@ -185,7 +210,7 @@ export function PublishingJourney() {
           {/* center vertical line */}
           <div
             className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
-            style={{ background: "rgba(201,168,76,0.3)" }}
+            style={{ background: "rgba(155,35,53,0.25)" }}
             aria-hidden
           />
           <div className="space-y-10">

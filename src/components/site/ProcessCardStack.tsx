@@ -4,7 +4,6 @@ import {
   useScroll,
   useTransform,
   useMotionValueEvent,
-  type MotionValue,
 } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import {
@@ -92,106 +91,70 @@ function StickyCard({
   i,
   step,
   total,
-  scrollYProgress,
+  progress,
 }: {
   i: number;
   step: Step;
   total: number;
-  scrollYProgress: MotionValue<number>;
+  progress: any;
 }) {
   const Icon = step.icon;
-
-  const segmentStart = i / total;
-  const segmentEnd = (i + 1) / total;
-  const prevSegmentStart = Math.max(0, segmentStart - 1 / total);
-
-  const y = useTransform(
-    scrollYProgress,
-    [prevSegmentStart, segmentStart, segmentEnd],
-    [120, 0, -40]
-  );
-
-  const scale = useTransform(
-    scrollYProgress,
-    [segmentStart, segmentEnd],
-    [1, 0.96]
-  );
-
-  const opacity = useTransform(
-    scrollYProgress,
-    [segmentStart, segmentEnd],
-    [1, 0.82]
-  );
+  
+  // Subtle scaling effect for the cards underneath
+  const targetScale = Math.max(0.5, 1 - (total - i - 1) * 0.05);
+  const scale = useTransform(progress, [i / total, 1], [1, targetScale]);
 
   return (
-    <motion.div
-      style={{
-        y,
-        scale,
-        opacity,
-        zIndex: i + 1,
-        position: "absolute",
-        top: "50%",
-        translateY: "-50%",
-        left: 0,
-        right: 0,
-        marginLeft: "auto",
-        marginRight: "auto",
-        width: "100%",
-        maxWidth: "56rem",
-        paddingLeft: "1rem",
-        paddingRight: "1rem",
-        transformOrigin: "top center",
-      }}
-    >
-      {/* Outer wrapper: border + blur on the page background */}
-      <div className="relative w-full overflow-hidden rounded-3xl border border-white/10 shadow-2xl backdrop-blur-3xl">
-        {/* Solid navy backing — blocks cards stacked behind from showing through */}
-        <div className="absolute inset-0 bg-[#0b1a35]/90" />
-
-        {/* Card content sits above the solid backing */}
-        <div className="relative grid w-full items-start gap-6 p-8 md:grid-cols-[auto_1fr] lg:gap-8 lg:p-10">
-          {/* Icon */}
-          <div className="flex flex-col items-center gap-3">
-            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-brand-red text-white lg:size-20">
-              <Icon className="size-8 lg:size-9" />
+    <div className="sticky top-0 flex h-screen items-center justify-center">
+      <motion.div
+        style={{
+          scale,
+          // Removed the large 120px offset to keep the stack centered.
+          // The i * 20 provides a slight "header peek" for the stack effect.
+          top: `${i * 20}px`, 
+        }}
+        className="relative origin-top w-full max-w-2xl px-5"
+      >
+        <div className="relative w-full overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+          <div className="absolute inset-0 bg-[#0b1a35]" />
+          <div className="relative grid w-full items-start gap-6 p-8 md:grid-cols-[auto_1fr] lg:gap-8 lg:p-10">
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-[#9b2335] text-white lg:size-20">
+                <Icon className="size-8 lg:size-9" />
+              </div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#9b2335]">
+                Step {i + 1}/{total}
+              </p>
             </div>
-            <p className="font-accent text-xs font-semibold uppercase tracking-widest text-brand-red">
-              Step {i + 1}/{total}
-            </p>
-          </div>
-
-          {/* Content */}
-          <div className="flex flex-col gap-4">
-            <h3 className="font-serif text-2xl font-bold text-white lg:text-3xl">
-              {step.title}
-            </h3>
-
-            <p className="text-sm leading-relaxed text-white/75 lg:text-base">
-              {step.desc}
-            </p>
-
-            <div className="pt-1">
-              <Link
-                to={step.href}
-                className="inline-flex items-center gap-2 rounded-full bg-brand-red px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-red-dark"
-              >
-                {step.cta}
-                <ArrowRight className="size-4" />
-              </Link>
+            <div className="flex flex-col gap-4">
+              <h3 className="font-serif text-2xl font-bold text-white lg:text-3xl">
+                {step.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-white/75 lg:text-base">
+                {step.desc}
+              </p>
+              <div className="pt-1">
+                <Link
+                  to={step.href}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#9b2335] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#7a1c29]"
+                >
+                  {step.cta}
+                  <ArrowRight className="size-4" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
 export function ProcessCardStack() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: container,
     offset: ["start start", "end end"],
   });
 
@@ -218,14 +181,12 @@ export function ProcessCardStack() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="font-accent text-xs font-semibold uppercase tracking-[0.2em] text-brand-red">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9b2335]">
               How We Work
             </span>
-
             <h2 className="mt-3 font-serif text-4xl font-bold text-balance text-white md:text-5xl">
               From Idea to International Bestseller
             </h2>
-
             <p className="mt-4 text-white/70">
               A seamless, 8-step journey crafted around your vision.
             </p>
@@ -233,67 +194,59 @@ export function ProcessCardStack() {
         </div>
       </div>
 
-      {/* Scroll Section */}
+      {/* Scroll container */}
       <div
-        ref={sectionRef}
+        ref={container}
         className="navy-hero-bg relative"
         style={{ height: `${steps.length * 100}vh` }}
       >
-        {/* Sticky viewport */}
-        <div className="sticky top-0 h-screen overflow-hidden">
-          <div className="relative mx-auto flex h-full max-w-7xl gap-8 px-5 lg:px-8">
-            {/* Sidebar */}
-            <div className="hidden lg:flex lg:w-[220px] lg:shrink-0 lg:items-center">
-              <div className="space-y-1">
-                {steps.map((s, i) => {
-                  const isActive = i === active;
-
-                  return (
-                    <div
-                      key={s.title}
-                      className="relative flex items-center gap-3 py-2 pl-4 text-sm"
-                    >
-                      {isActive && (
-                        <motion.span
-                          layoutId="process-rail-indicator"
-                          className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 bg-brand-red"
-                        />
-                      )}
-
-                      <span
-                        className={`font-serif text-base transition-colors duration-300 ${
-                          isActive ? "text-brand-red" : "text-white/40"
-                        }`}
-                      >
-                        0{i + 1}
-                      </span>
-
-                      <span
-                        className={`transition-colors duration-300 ${
-                          isActive ? "text-white" : "text-white/40"
-                        }`}
-                      >
-                        {s.title.replace(" (Optional)", "")}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Stair Stack */}
-            <div className="relative flex-1">
-              {steps.map((step, i) => (
-                <StickyCard
-                  key={step.title}
-                  i={i}
-                  step={step}
-                  total={steps.length}
-                  scrollYProgress={scrollYProgress}
-                />
-              ))}
-            </div>
+        {/* Sidebar: sticky, vertically centered */}
+        <div className="sticky top-0 h-screen hidden lg:flex items-center pointer-events-none z-50">
+          <div className="absolute left-8 xl:left-16 space-y-1">
+            {steps.map((s, i) => {
+              const isActive = i === active;
+              return (
+                <div
+                  key={s.title}
+                  className="relative flex items-center gap-3 py-2 pl-4 text-sm"
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="process-rail-indicator"
+                      className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 bg-[#9b2335]"
+                    />
+                  )}
+                  <span
+                    className={`font-serif text-base transition-colors duration-300 ${
+                      isActive ? "text-[#9b2335]" : "text-white/40"
+                    }`}
+                  >
+                    0{i + 1}
+                  </span>
+                  <span
+                    className={`transition-colors duration-300 ${
+                      isActive ? "text-white" : "text-white/40"
+                    }`}
+                  >
+                    {s.title.replace(" (Optional)", "")}
+                  </span>
+                </div>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Cards — centered horizontally and vertically in viewport */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          {steps.map((step, i) => (
+            <StickyCard
+              key={step.title}
+              i={i}
+              step={step}
+              total={steps.length}
+              progress={scrollYProgress}
+            />
+          ))}
         </div>
       </div>
     </>
