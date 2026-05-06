@@ -26,6 +26,9 @@ import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
 import { Route as PortalBillingRouteImport } from './routes/portal.billing'
 import { Route as CrmLoginRouteImport } from './routes/crm.login'
 import { Route as CrmDashboardRouteImport } from './routes/crm.dashboard'
+import { Route as CrmProjectsIndexRouteImport } from './routes/crm.projects.index'
+import { Route as CrmLeadsIndexRouteImport } from './routes/crm.leads.index'
+import { Route as CrmLeadsLeadIdRouteImport } from './routes/crm.leads.$leadId'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -112,6 +115,21 @@ const CrmDashboardRoute = CrmDashboardRouteImport.update({
   path: '/crm/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CrmProjectsIndexRoute = CrmProjectsIndexRouteImport.update({
+  id: '/crm/projects/',
+  path: '/crm/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmLeadsIndexRoute = CrmLeadsIndexRouteImport.update({
+  id: '/crm/leads/',
+  path: '/crm/leads/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmLeadsLeadIdRoute = CrmLeadsLeadIdRouteImport.update({
+  id: '/crm/leads/$leadId',
+  path: '/crm/leads/$leadId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +149,9 @@ export interface FileRoutesByFullPath {
   '/portal/profile': typeof PortalProfileRoute
   '/portal/project': typeof PortalProjectRoute
   '/portal/': typeof PortalIndexRoute
+  '/crm/leads/$leadId': typeof CrmLeadsLeadIdRoute
+  '/crm/leads/': typeof CrmLeadsIndexRoute
+  '/crm/projects/': typeof CrmProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +171,9 @@ export interface FileRoutesByTo {
   '/portal/profile': typeof PortalProfileRoute
   '/portal/project': typeof PortalProjectRoute
   '/portal': typeof PortalIndexRoute
+  '/crm/leads/$leadId': typeof CrmLeadsLeadIdRoute
+  '/crm/leads': typeof CrmLeadsIndexRoute
+  '/crm/projects': typeof CrmProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,6 +194,9 @@ export interface FileRoutesById {
   '/portal/profile': typeof PortalProfileRoute
   '/portal/project': typeof PortalProjectRoute
   '/portal/': typeof PortalIndexRoute
+  '/crm/leads/$leadId': typeof CrmLeadsLeadIdRoute
+  '/crm/leads/': typeof CrmLeadsIndexRoute
+  '/crm/projects/': typeof CrmProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +218,9 @@ export interface FileRouteTypes {
     | '/portal/profile'
     | '/portal/project'
     | '/portal/'
+    | '/crm/leads/$leadId'
+    | '/crm/leads/'
+    | '/crm/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +240,9 @@ export interface FileRouteTypes {
     | '/portal/profile'
     | '/portal/project'
     | '/portal'
+    | '/crm/leads/$leadId'
+    | '/crm/leads'
+    | '/crm/projects'
   id:
     | '__root__'
     | '/'
@@ -229,6 +262,9 @@ export interface FileRouteTypes {
     | '/portal/profile'
     | '/portal/project'
     | '/portal/'
+    | '/crm/leads/$leadId'
+    | '/crm/leads/'
+    | '/crm/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,6 +285,9 @@ export interface RootRouteChildren {
   PortalProfileRoute: typeof PortalProfileRoute
   PortalProjectRoute: typeof PortalProjectRoute
   PortalIndexRoute: typeof PortalIndexRoute
+  CrmLeadsLeadIdRoute: typeof CrmLeadsLeadIdRoute
+  CrmLeadsIndexRoute: typeof CrmLeadsIndexRoute
+  CrmProjectsIndexRoute: typeof CrmProjectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -372,6 +411,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/crm/projects/': {
+      id: '/crm/projects/'
+      path: '/crm/projects'
+      fullPath: '/crm/projects/'
+      preLoaderRoute: typeof CrmProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/leads/': {
+      id: '/crm/leads/'
+      path: '/crm/leads'
+      fullPath: '/crm/leads/'
+      preLoaderRoute: typeof CrmLeadsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/leads/$leadId': {
+      id: '/crm/leads/$leadId'
+      path: '/crm/leads/$leadId'
+      fullPath: '/crm/leads/$leadId'
+      preLoaderRoute: typeof CrmLeadsLeadIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -393,6 +453,9 @@ const rootRouteChildren: RootRouteChildren = {
   PortalProfileRoute: PortalProfileRoute,
   PortalProjectRoute: PortalProjectRoute,
   PortalIndexRoute: PortalIndexRoute,
+  CrmLeadsLeadIdRoute: CrmLeadsLeadIdRoute,
+  CrmLeadsIndexRoute: CrmLeadsIndexRoute,
+  CrmProjectsIndexRoute: CrmProjectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
