@@ -5,6 +5,8 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { LiveChat } from "@/components/site/LiveChat";
 import { PortalAuthProvider } from "@/context/PortalAuthContext";
+import { CRMAuthProvider } from "@/context/CRMAuthContext";
+import { CRMProvider } from "@/context/CRMContext";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -73,22 +75,27 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const location = useLocation();
   const isPortal = location.pathname.startsWith("/portal");
+  const isCRM = location.pathname.startsWith("/crm");
 
   return (
-    <PortalAuthProvider>
-      {isPortal ? (
-        <Outlet />
-      ) : (
-        <>
-          <Navbar />
-          <main className="min-h-screen">
+    <CRMAuthProvider>
+      <CRMProvider>
+        <PortalAuthProvider>
+          {isPortal || isCRM ? (
             <Outlet />
-          </main>
-          <Footer />
-          <LiveChat />
-        </>
-      )}
-      <Toaster />
-    </PortalAuthProvider>
+          ) : (
+            <>
+              <Navbar />
+              <main className="min-h-screen">
+                <Outlet />
+              </main>
+              <Footer />
+              <LiveChat />
+            </>
+          )}
+          <Toaster />
+        </PortalAuthProvider>
+      </CRMProvider>
+    </CRMAuthProvider>
   );
 }
