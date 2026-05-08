@@ -37,18 +37,15 @@ function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (email.trim().toLowerCase() === VALID_EMAIL && password === VALID_PASSWORD) {
-      setLoading(true);
-      await new Promise((r) => setTimeout(r, 800));
-      login();
+    setLoading(true);
+    const ok = await login(email.trim(), password);
+    setLoading(false);
+    if (ok) {
       await controls.start({ opacity: 0, y: -20, transition: { duration: 0.4 } });
       navigate({ to: "/portal/dashboard" });
     } else {
       setError("Invalid email or password");
-      controls.start({
-        x: [0, -10, 10, -8, 8, -4, 4, 0],
-        transition: { duration: 0.5 },
-      });
+      controls.start({ x: [0, -10, 10, -8, 8, -4, 4, 0], transition: { duration: 0.5 } });
     }
   };
 
