@@ -1,98 +1,110 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send } from "lucide-react";
-import { useCRM } from "@/context/CRMContext";
+import { supabase } from "@/integrations/supabase/client";
 
+const SESSION_KEY = "awh_chat_session_id";
 const VISITOR_KEY = "awh_chat_visitor";
-const CHAT_ID_KEY = "awh_chat_id";
 
-type Visitor = { id: string; name: string; email: string; phone: string };
+type Visitor = { name: string; email: string; phone: string };
+type Msg = { id: string; sender: "visitor" | "staff"; staff_name?: string | null; message: string; created_at: string };
+
+function fmtTime(iso: string) {
+  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
 
 export function LiveChat() {
-  const { chats, addChat, addVisitorMessage, addNotification } = useCRM();
   const [open, setOpen] = useState(false);
   const [visitor, setVisitor] = useState<Visitor | null>(null);
-  const [chatId, setChatId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Msg[]>([]);
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const sentArrivalRef = useRef(false);
 
-  const chat = chatId ? chats.find((c) => c.id === chatId) : null;
-
+  // Restore visitor + session from localStorage
   useEffect(() => {
     try {
       const v = localStorage.getItem(VISITOR_KEY);
-      const cid = localStorage.getItem(CHAT_ID_KEY);
+      const s = localStorage.getItem(SESSION_KEY);
       if (v) setVisitor(JSON.parse(v));
-      if (cid) setChatId(cid);
+      if (s) setSessionId(s);
     } catch {}
   }, []);
 
+  // Load messages + subscribe to realtime when session exists
   useEffect(() => {
-    if (sentArrivalRef.current) return;
-    sentArrivalRef.current = true;
-    addNotification({
-      type: "visitor",
-      message: "New visitor on website — Browser Session",
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
-      read: false,
-      targetRole: ["salesperson", "project_manager"],
-    });
-  }, [addNotification]);
+    if (!sessionId) return;
+    let cancelled = false;
+
+    const load = async () => {
+      const { data } = await supabase
+        .from("chat_messages")
+        .select("*")
+        .eq("session_id", sessionId)
+        .order("created_at", { ascending: true });
+      if (!cancelled && data) setMessages(data as Msg[]);
+    };
+    load();
+
+    const channel = supabase
+      .channel(`chat-${sessionId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "chat_messages", filter: `session_id=eq.${sessionId}` },
+        (payload) => setMessages((prev) => [...prev, payload.new as Msg]),
+      )
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, [sessionId]);
 
   useEffect(() => {
     if (open && scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [open, chat?.messages.length]);
+  }, [open, messages.length]);
 
-  const submitVisitor = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitVisitor = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const v: Visitor = {
-      id: `v_${Date.now()}`,
       name: String(fd.get("name") || "").trim(),
       email: String(fd.get("email") || "").trim(),
       phone: String(fd.get("phone") || "").trim(),
     };
-    localStorage.setItem(VISITOR_KEY, JSON.stringify(v));
-    setVisitor(v);
+    const { data, error } = await supabase
+      .from("chat_sessions")
+      .insert({
+        visitor_name: v.name,
+        visitor_email: v.email,
+        visitor_phone: v.phone,
+        status: "Waiting",
+      })
+      .select()
+      .single();
+    if (error || !data) return;
 
-    const newId = `CHAT-${Date.now()}`;
-    const t = new Date();
-    const greeting = "A publishing consultant will respond shortly.";
-    addChat({
-      id: newId,
-      leadId: null,
-      visitorName: v.name,
-      visitorEmail: v.email,
-      visitorPhone: v.phone,
-      ipAddress: "0.0.0.0",
-      location: "Unknown — Browser Session",
-      startedAt: t.toLocaleString(),
-      status: "Active",
-      assignedStaff: null,
-      unread: 1,
-      messages: [{ from: "staff", staffName: "AWH", message: greeting, time: t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), date: t.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) }],
+    await supabase.from("chat_messages").insert({
+      session_id: data.id,
+      sender: "staff",
+      staff_name: "AWH",
+      message: "Thanks for reaching out! A publishing consultant will be with you shortly.",
     });
-    addNotification({
-      type: "new_chat",
-      message: `New chat started: ${v.name} — Browser Session`,
-      time: t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      date: t.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
-      read: false,
-      targetRole: ["salesperson", "project_manager"],
-      link: `/crm/chat/${newId}`,
-    });
-    setChatId(newId);
-    localStorage.setItem(CHAT_ID_KEY, newId);
+
+    localStorage.setItem(VISITOR_KEY, JSON.stringify(v));
+    localStorage.setItem(SESSION_KEY, data.id);
+    setVisitor(v);
+    setSessionId(data.id);
   };
 
-  const sendMessage = (e: React.FormEvent) => {
+  const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = draft.trim();
-    if (!text || !chatId) return;
-    addVisitorMessage(chatId, text);
+    if (!text || !sessionId) return;
     setDraft("");
+    await supabase.from("chat_messages").insert({ session_id: sessionId, sender: "visitor", message: text });
+    await supabase.from("chat_sessions").update({ updated_at: new Date().toISOString() }).eq("id", sessionId);
   };
 
   return (
@@ -108,7 +120,7 @@ export function LiveChat() {
               <button onClick={() => setOpen(false)} aria-label="Close chat"><X className="size-4" /></button>
             </div>
 
-            {!visitor || !chat ? (
+            {!visitor || !sessionId ? (
               <div className="p-4">
                 <p className="mb-3 text-xs leading-relaxed text-navy/75">A publishing consultant will join shortly. Please leave your details.</p>
                 <form onSubmit={submitVisitor} className="space-y-2">
@@ -121,10 +133,10 @@ export function LiveChat() {
             ) : (
               <>
                 <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-offwhite/50 p-3">
-                  {chat.messages.map((m, i) => (
-                    <div key={i} className={`flex flex-col ${m.from === "visitor" ? "items-end" : "items-start"}`}>
-                      <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.from === "visitor" ? "bg-brand-red text-white" : "bg-white text-navy shadow-sm"}`}>{m.message}</div>
-                      <span className="mt-1 text-[10px] text-navy/45">{m.time}</span>
+                  {messages.map((m) => (
+                    <div key={m.id} className={`flex flex-col ${m.sender === "visitor" ? "items-end" : "items-start"}`}>
+                      <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.sender === "visitor" ? "bg-brand-red text-white" : "bg-white text-navy shadow-sm"}`}>{m.message}</div>
+                      <span className="mt-1 text-[10px] text-navy/45">{fmtTime(m.created_at)}{m.sender === "staff" && m.staff_name ? ` · ${m.staff_name}` : ""}</span>
                     </div>
                   ))}
                 </div>

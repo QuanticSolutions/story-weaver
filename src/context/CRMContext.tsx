@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   initialLeads,
   initialProjects,
@@ -71,6 +72,66 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       date: d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
     };
   };
+
+  const fmtTime = (iso: string) => {
+    const d = new Date(iso);
+    return {
+      time: d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      date: d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+    };
+  };
+
+  // ---------- Live chat: sync DB sessions+messages into `chats` ----------
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const { data: sessions } = await supabase
+        .from("chat_sessions")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (!sessions || cancelled) return;
+      const ids = sessions.map((s: any) => s.id);
+      const { data: msgs } = ids.length
+        ? await supabase.from("chat_messages").select("*").in("session_id", ids).order("created_at", { ascending: true })
+        : { data: [] as any[] };
+      if (cancelled) return;
+      const liveChats: Chat[] = sessions.map((s: any) => {
+        const sm = (msgs || []).filter((m: any) => m.session_id === s.id);
+        const t = fmtTime(s.created_at);
+        return {
+          id: s.id,
+          leadId: s.lead_id,
+          visitorName: s.visitor_name,
+          visitorEmail: s.visitor_email,
+          visitorPhone: s.visitor_phone,
+          ipAddress: s.ip_address || "0.0.0.0",
+          location: s.location || "Unknown — Browser Session",
+          startedAt: `${t.date} ${t.time}`,
+          status: (s.status as Chat["status"]) || "Waiting",
+          assignedStaff: s.assigned_staff,
+          unread: sm.filter((m: any) => m.sender === "visitor").length,
+          messages: sm.map((m: any) => ({ from: m.sender, staffName: m.staff_name || undefined, message: m.message, ...fmtTime(m.created_at) })),
+        };
+      });
+      setChats((prev) => {
+        const seeds = prev.filter((c) => c.id.startsWith("CHAT-"));
+        return [...liveChats, ...seeds];
+      });
+    };
+    load();
+
+    const channel = supabase
+      .channel("chat-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "chat_sessions" }, () => load())
+      .on("postgres_changes", { event: "*", schema: "public", table: "chat_messages" }, () => load())
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
 
   const value: CRMContextValue = {
     leads,
@@ -204,11 +265,22 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       const t = now();
       const msg: ChatMessage = { from: "staff", staffName, message, ...t };
       setChats((p) => p.map((c) => (c.id === chatId ? { ...c, messages: [...c.messages, msg], unread: 0 } : c)));
+      if (chatId.startsWith("CHAT-")) return;
+      void supabase.from("chat_messages").insert({ session_id: chatId, sender: "staff", staff_name: staffName, message });
+      void supabase.from("chat_sessions").update({ status: "Active", updated_at: new Date().toISOString() }).eq("id", chatId);
     },
-    assignChat: (chatId, staffName) =>
-      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, assignedStaff: staffName, status: "Active" } : c))),
-    closeChat: (chatId) =>
-      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, status: "Closed" } : c))),
+    assignChat: (chatId, staffName) => {
+      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, assignedStaff: staffName, status: "Active" } : c)));
+      if (!chatId.startsWith("CHAT-")) {
+        void supabase.from("chat_sessions").update({ assigned_staff: staffName, status: "Active" }).eq("id", chatId);
+      }
+    },
+    closeChat: (chatId) => {
+      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, status: "Closed" } : c)));
+      if (!chatId.startsWith("CHAT-")) {
+        void supabase.from("chat_sessions").update({ status: "Closed" }).eq("id", chatId);
+      }
+    },
     addChat: (chat) => setChats((p) => [chat, ...p]),
     addVisitorMessage: (chatId, message) => {
       const t = now();
@@ -216,6 +288,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       setChats((p) =>
         p.map((c) => (c.id === chatId ? { ...c, messages: [...c.messages, msg], unread: c.unread + 1 } : c)),
       );
+      if (!chatId.startsWith("CHAT-")) {
+        void supabase.from("chat_messages").insert({ session_id: chatId, sender: "visitor", message });
+      }
     },
 
     markNotificationRead: (id) =>
