@@ -91,15 +91,332 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          link: string | null
+          message: string
+          read: boolean
+          target_roles: Json
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message: string
+          read?: boolean
+          target_roles?: Json
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message?: string
+          read?: boolean
+          target_roles?: Json
+          type?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          assigned_to: string | null
+          chat_history: Json
+          created_at: string
+          created_at_text: string | null
+          email: string
+          id: string
+          ip_address: string | null
+          last_contact: string | null
+          location: string | null
+          name: string
+          notes: string | null
+          phone: string
+          project_id: string | null
+          service_interest: Json
+          source: string
+          status: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          chat_history?: Json
+          created_at?: string
+          created_at_text?: string | null
+          email: string
+          id: string
+          ip_address?: string | null
+          last_contact?: string | null
+          location?: string | null
+          name: string
+          notes?: string | null
+          phone: string
+          project_id?: string | null
+          service_interest?: Json
+          source?: string
+          status?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          chat_history?: Json
+          created_at?: string
+          created_at_text?: string | null
+          email?: string
+          id?: string
+          ip_address?: string | null
+          last_contact?: string | null
+          location?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string
+          project_id?: string | null
+          service_interest?: Json
+          source?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      portal_files: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          project_id: string
+          size: string | null
+          storage_path: string | null
+          uploaded_by: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          name: string
+          project_id: string
+          size?: string | null
+          storage_path?: string | null
+          uploaded_by?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          project_id?: string
+          size?: string | null
+          storage_path?: string | null
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portal_files_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portal_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          project_id: string
+          read: boolean
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          project_id: string
+          read?: boolean
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          project_id?: string
+          read?: boolean
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portal_notifications_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar: string | null
+          created_at: string
+          department: string | null
+          email: string | null
+          id: string
+          joined_date: string | null
+          name: string
+          phone: string | null
+          project_id: string | null
+        }
+        Insert: {
+          avatar?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string | null
+          id: string
+          joined_date?: string | null
+          name?: string
+          phone?: string | null
+          project_id?: string | null
+        }
+        Update: {
+          avatar?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string | null
+          id?: string
+          joined_date?: string | null
+          name?: string
+          phone?: string | null
+          project_id?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          amount_paid: number
+          assigned_manager: string | null
+          assigned_production: Json
+          book_title: string
+          client_email: string
+          client_id_text: string | null
+          client_name: string
+          client_user_id: string | null
+          contract_signed: boolean
+          contract_signed_at: string | null
+          contract_signed_by: string | null
+          created_at: string
+          estimated_completion: string | null
+          genre: string
+          health: string
+          id: string
+          internal_notes: Json
+          invoices: Json
+          messages: Json
+          nda_signed: boolean
+          nda_signed_at: string | null
+          nda_signed_by: string | null
+          outstanding: number
+          stages: Json
+          start_date: string | null
+          tasks: Json
+          total_value: number
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number
+          assigned_manager?: string | null
+          assigned_production?: Json
+          book_title: string
+          client_email: string
+          client_id_text?: string | null
+          client_name: string
+          client_user_id?: string | null
+          contract_signed?: boolean
+          contract_signed_at?: string | null
+          contract_signed_by?: string | null
+          created_at?: string
+          estimated_completion?: string | null
+          genre?: string
+          health?: string
+          id: string
+          internal_notes?: Json
+          invoices?: Json
+          messages?: Json
+          nda_signed?: boolean
+          nda_signed_at?: string | null
+          nda_signed_by?: string | null
+          outstanding?: number
+          stages?: Json
+          start_date?: string | null
+          tasks?: Json
+          total_value?: number
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number
+          assigned_manager?: string | null
+          assigned_production?: Json
+          book_title?: string
+          client_email?: string
+          client_id_text?: string | null
+          client_name?: string
+          client_user_id?: string | null
+          contract_signed?: boolean
+          contract_signed_at?: string | null
+          contract_signed_by?: string | null
+          created_at?: string
+          estimated_completion?: string | null
+          genre?: string
+          health?: string
+          id?: string
+          internal_notes?: Json
+          invoices?: Json
+          messages?: Json
+          nda_signed?: boolean
+          nda_signed_at?: string | null
+          nda_signed_by?: string | null
+          outstanding?: number
+          stages?: Json
+          start_date?: string | null
+          tasks?: Json
+          total_value?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "project_manager" | "salesperson" | "production" | "client"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -226,6 +543,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["project_manager", "salesperson", "production", "client"],
+    },
   },
 } as const
