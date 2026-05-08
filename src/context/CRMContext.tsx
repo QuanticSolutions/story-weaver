@@ -114,8 +114,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
         };
       });
       setChats((prev) => {
-        const seedOnly = prev.filter((c) => !c.id.includes("-") || c.id.startsWith("CHAT-"));
-        const seeds = seedOnly.filter((c) => !liveChats.find((lc) => lc.id === c.id));
+        const seeds = prev.filter((c) => c.id.startsWith("CHAT-"));
         return [...liveChats, ...seeds];
       });
     };
