@@ -4,7 +4,6 @@ import { motion, useAnimationControls } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 import { FloatingOrbs } from "@/components/site/FloatingOrbs";
 import { usePortalAuth } from "@/context/PortalAuthContext";
-import { sampleClient } from "@/data/sampleClient";
 
 export const Route = createFileRoute("/portal/login")({
   head: () => ({
@@ -17,8 +16,8 @@ export const Route = createFileRoute("/portal/login")({
   component: LoginPage,
 });
 
-const VALID_EMAIL = sampleClient.email;
-const VALID_PASSWORD = sampleClient.projectId;
+const VALID_EMAIL = "james.harrington@email.com";
+const VALID_PASSWORD = "AWH-2024-0047";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -37,18 +36,15 @@ function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (email.trim().toLowerCase() === VALID_EMAIL && password === VALID_PASSWORD) {
-      setLoading(true);
-      await new Promise((r) => setTimeout(r, 800));
-      login();
+    setLoading(true);
+    const ok = await login(email.trim(), password);
+    setLoading(false);
+    if (ok) {
       await controls.start({ opacity: 0, y: -20, transition: { duration: 0.4 } });
       navigate({ to: "/portal/dashboard" });
     } else {
       setError("Invalid email or password");
-      controls.start({
-        x: [0, -10, 10, -8, 8, -4, 4, 0],
-        transition: { duration: 0.5 },
-      });
+      controls.start({ x: [0, -10, 10, -8, 8, -4, 4, 0], transition: { duration: 0.5 } });
     }
   };
 
