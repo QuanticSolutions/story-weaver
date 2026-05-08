@@ -4,7 +4,6 @@ import { motion, useAnimationControls } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 import { FloatingOrbs } from "@/components/site/FloatingOrbs";
 import { usePortalAuth } from "@/context/PortalAuthContext";
-import { sampleClient } from "@/data/sampleClient";
 
 export const Route = createFileRoute("/portal/login")({
   head: () => ({
@@ -17,8 +16,8 @@ export const Route = createFileRoute("/portal/login")({
   component: LoginPage,
 });
 
-const VALID_EMAIL = sampleClient.email;
-const VALID_PASSWORD = sampleClient.projectId;
+const VALID_EMAIL = "james.harrington@email.com";
+const VALID_PASSWORD = "AWH-2024-0047";
 
 function LoginPage() {
   const navigate = useNavigate();
