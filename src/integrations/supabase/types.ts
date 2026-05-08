@@ -14,7 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          sender: string
+          session_id: string
+          staff_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          sender: string
+          session_id: string
+          staff_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          sender?: string
+          session_id?: string
+          staff_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_sessions: {
+        Row: {
+          assigned_staff: string | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          lead_id: string | null
+          location: string | null
+          status: string
+          updated_at: string
+          visitor_email: string
+          visitor_name: string
+          visitor_phone: string
+        }
+        Insert: {
+          assigned_staff?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          lead_id?: string | null
+          location?: string | null
+          status?: string
+          updated_at?: string
+          visitor_email: string
+          visitor_name: string
+          visitor_phone: string
+        }
+        Update: {
+          assigned_staff?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          lead_id?: string | null
+          location?: string | null
+          status?: string
+          updated_at?: string
+          visitor_email?: string
+          visitor_name?: string
+          visitor_phone?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
