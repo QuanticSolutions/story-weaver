@@ -266,11 +266,22 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       const t = now();
       const msg: ChatMessage = { from: "staff", staffName, message, ...t };
       setChats((p) => p.map((c) => (c.id === chatId ? { ...c, messages: [...c.messages, msg], unread: 0 } : c)));
+      if (chatId.startsWith("CHAT-")) return;
+      void supabase.from("chat_messages").insert({ session_id: chatId, sender: "staff", staff_name: staffName, message });
+      void supabase.from("chat_sessions").update({ status: "Active", updated_at: new Date().toISOString() }).eq("id", chatId);
     },
-    assignChat: (chatId, staffName) =>
-      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, assignedStaff: staffName, status: "Active" } : c))),
-    closeChat: (chatId) =>
-      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, status: "Closed" } : c))),
+    assignChat: (chatId, staffName) => {
+      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, assignedStaff: staffName, status: "Active" } : c)));
+      if (!chatId.startsWith("CHAT-")) {
+        void supabase.from("chat_sessions").update({ assigned_staff: staffName, status: "Active" }).eq("id", chatId);
+      }
+    },
+    closeChat: (chatId) => {
+      setChats((p) => p.map((c) => (c.id === chatId ? { ...c, status: "Closed" } : c)));
+      if (!chatId.startsWith("CHAT-")) {
+        void supabase.from("chat_sessions").update({ status: "Closed" }).eq("id", chatId);
+      }
+    },
     addChat: (chat) => setChats((p) => [chat, ...p]),
     addVisitorMessage: (chatId, message) => {
       const t = now();
@@ -278,6 +289,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       setChats((p) =>
         p.map((c) => (c.id === chatId ? { ...c, messages: [...c.messages, msg], unread: c.unread + 1 } : c)),
       );
+      if (!chatId.startsWith("CHAT-")) {
+        void supabase.from("chat_messages").insert({ session_id: chatId, sender: "visitor", message });
+      }
     },
 
     markNotificationRead: (id) =>
