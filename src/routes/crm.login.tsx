@@ -32,10 +32,10 @@ function CRMLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const u = login(email, password);
+    setLoading(true);
+    const u = await login(email, password);
+    setLoading(false);
     if (u) {
-      setLoading(true);
-      await new Promise((r) => setTimeout(r, 600));
       await controls.start({ opacity: 0, y: -20, transition: { duration: 0.4 } });
       navigate({ to: "/crm/dashboard" });
     } else {
