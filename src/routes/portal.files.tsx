@@ -19,20 +19,20 @@ export const Route = createFileRoute("/portal/files")({
 });
 
 function FilesPage() {
+  const sampleClient = useClient();
+  const { uploadFile, downloadFile } = usePortalData();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
   const handleUpload = () => inputRef.current?.click();
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    setTimeout(() => {
-      setUploading(false);
-      toast.success("File uploaded", { description: file.name });
-      if (inputRef.current) inputRef.current.value = "";
-    }, 1500);
+    await uploadFile(file);
+    setUploading(false);
+    if (inputRef.current) inputRef.current.value = "";
   };
 
   const filterBy = (type?: string) =>
