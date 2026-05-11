@@ -269,54 +269,57 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     addInvoice: (projectId, invoice) =>
       mapProjects((pr) => ({ ...pr, invoices: [...pr.invoices, invoice] }), projectId),
     updateInvoiceStatus: (projectId, invoiceId, status, method) =>
-      setProjects((p) =>
-        p.map((pr) => {
-          if (pr.id !== projectId) return pr;
-          const invoices = pr.invoices.map((inv) =>
-            inv.id === invoiceId ? { ...inv, status, method: method ?? inv.method } : inv,
-          );
-          const amountPaid = invoices.filter((i) => i.status === "Paid").reduce((s, i) => s + i.amount, 0);
-          const outstanding = invoices.filter((i) => i.status !== "Paid").reduce((s, i) => s + i.amount, 0);
-          return { ...pr, invoices, amountPaid, outstanding };
-        }),
-      ),
+      mapProjects((pr) => {
+        const invoices = pr.invoices.map((inv) =>
+          inv.id === invoiceId ? { ...inv, status, method: method ?? inv.method } : inv,
+        );
+        const amountPaid = invoices.filter((i) => i.status === "Paid").reduce((s, i) => s + i.amount, 0);
+        const outstanding = invoices.filter((i) => i.status !== "Paid").reduce((s, i) => s + i.amount, 0);
+        return { ...pr, invoices, amountPaid, outstanding };
+      }, projectId),
     addInternalNote: (projectId, note, author) => {
       const t = now();
       const entry: InternalNote = { author, note, date: t.date };
-      setProjects((p) =>
-        p.map((pr) => (pr.id === projectId ? { ...pr, internalNotes: [entry, ...pr.internalNotes] } : pr)),
-      );
+      mapProjects((pr) => ({ ...pr, internalNotes: [entry, ...pr.internalNotes] }), projectId);
     },
     addProjectMessage: (projectId, message, sender) => {
       const t = now();
-      setProjects((p) =>
-        p.map((pr) => {
-          if (pr.id !== projectId) return pr;
-          const msgs = pr.messages || [];
-          const next: ProjectMessage = {
-            id: msgs.length ? Math.max(...msgs.map((m) => m.id)) + 1 : 1,
-            from: sender.name,
-            role: sender.role,
-            avatar: sender.avatar,
-            message,
-            date: t.date,
-            time: t.time,
-            fromClient: sender.fromClient,
-          };
-          return { ...pr, messages: [...msgs, next] };
-        }),
-      );
+      mapProjects((pr) => {
+        const msgs = pr.messages || [];
+        const nxt: ProjectMessage = {
+          id: msgs.length ? Math.max(...msgs.map((m) => m.id)) + 1 : 1,
+          from: sender.name, role: sender.role, avatar: sender.avatar, message,
+          date: t.date, time: t.time, fromClient: sender.fromClient,
+        };
+        return { ...pr, messages: [...msgs, nxt] };
+      }, projectId);
+      // also drop a portal notification if this is staff replying
+      if (!sender.fromClient) {
+        void supabase.from("portal_notifications").insert({
+          project_id: projectId, type: "message", message: `${sender.name} sent you a new message.`,
+        });
+      }
     },
-    addProject: (project) => setProjects((p) => [project, ...p]),
+    addProject: (project) => {
+      setProjects((p) => [project, ...p]);
+      void supabase.from("projects").insert({
+        id: project.id, client_name: project.clientName, client_email: project.clientEmail,
+        client_id_text: project.clientId, book_title: project.bookTitle, genre: project.genre,
+        assigned_manager: project.assignedManager, assigned_production: project.assignedProduction as any,
+        start_date: project.startDate, estimated_completion: project.estimatedCompletion,
+        total_value: project.totalValue, amount_paid: project.amountPaid, outstanding: project.outstanding,
+        health: project.health, stages: project.stages as any, invoices: project.invoices as any,
+        tasks: project.tasks as any, internal_notes: project.internalNotes as any,
+        messages: (project.messages || []) as any,
+        nda_signed: project.ndaSigned, contract_signed: project.contractSigned,
+      });
+    },
     signProjectContract: (projectId, type, signerName) => {
       const t = now();
-      setProjects((p) =>
-        p.map((pr) => {
-          if (pr.id !== projectId) return pr;
-          if (type === "nda") return { ...pr, ndaSigned: true, ndaSignedAt: t.date, ndaSignedBy: signerName };
-          return { ...pr, contractSigned: true, contractSignedAt: t.date, contractSignedBy: signerName };
-        }),
-      );
+      mapProjects((pr) => type === "nda"
+        ? { ...pr, ndaSigned: true, ndaSignedAt: t.date, ndaSignedBy: signerName }
+        : { ...pr, contractSigned: true, contractSignedAt: t.date, contractSignedBy: signerName },
+        projectId);
     },
 
     sendChatMessage: (chatId, message, staffName) => {
