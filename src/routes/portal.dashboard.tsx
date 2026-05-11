@@ -27,6 +27,7 @@ export const Route = createFileRoute("/portal/dashboard")({
 });
 
 function DashboardPage() {
+  const sampleClient = useClient();
   const completed = sampleClient.stages.filter((s) => s.status === "Completed").length;
   const total = sampleClient.stages.length;
   const progress = Math.round((completed / total) * 100);

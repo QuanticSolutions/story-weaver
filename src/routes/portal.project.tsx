@@ -24,6 +24,7 @@ const statusStyles: Record<string, string> = {
 };
 
 function ProjectPage() {
+  const sampleClient = useClient();
   const completed = sampleClient.stages.filter((s) => s.status === "Completed").length;
   const total = sampleClient.stages.length;
   const pct = Math.round((completed / total) * 100);

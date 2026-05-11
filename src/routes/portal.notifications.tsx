@@ -20,6 +20,7 @@ export const Route = createFileRoute("/portal/notifications")({
 type Notif = (typeof sampleClient.notifications)[number];
 
 function NotificationsPage() {
+  const sampleClient = useClient();
   const [items, setItems] = useState<Notif[]>(sampleClient.notifications);
 
   const markAllRead = () => setItems(items.map((i) => ({ ...i, read: true })));

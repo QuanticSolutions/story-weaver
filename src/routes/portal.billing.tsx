@@ -36,6 +36,7 @@ export const Route = createFileRoute("/portal/billing")({
 });
 
 function BillingPage() {
+  const sampleClient = useClient();
   const total = sampleClient.billing.reduce((sum, b) => sum + b.amount, 0);
   const paid = sampleClient.billing.filter((b) => b.status === "Paid").reduce((s, b) => s + b.amount, 0);
   const outstanding = total - paid;

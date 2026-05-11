@@ -18,6 +18,7 @@ export const Route = createFileRoute("/portal/profile")({
 });
 
 function ProfilePage() {
+  const sampleClient = useClient();
   const [editing, setEditing] = useState(false);
   const [pwdOpen, setPwdOpen] = useState(false);
   const [name, setName] = useState(sampleClient.name);

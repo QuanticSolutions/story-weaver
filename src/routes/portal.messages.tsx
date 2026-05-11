@@ -18,6 +18,7 @@ export const Route = createFileRoute("/portal/messages")({
 type Msg = (typeof sampleClient.messages)[number];
 
 function MessagesPage() {
+  const sampleClient = useClient();
   const [messages, setMessages] = useState<Msg[]>(sampleClient.messages);
   const [text, setText] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
