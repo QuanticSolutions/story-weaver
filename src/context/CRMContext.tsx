@@ -220,77 +220,54 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     chats,
     notifications,
 
-    updateLeadStatus: (leadId, status) =>
-      setLeads((p) => p.map((l) => (l.id === leadId ? { ...l, status } : l))),
+    updateLeadStatus: (leadId, status) => mapLeads((l) => ({ ...l, status }), leadId),
     addLeadMessage: (leadId, message, staffName) => {
       const t = now();
-      setLeads((p) =>
-        p.map((l) =>
-          l.id === leadId
-            ? { ...l, chatHistory: [...l.chatHistory, { from: "staff", staffName, message, ...t }], lastContact: t.date }
-            : l,
-        ),
-      );
+      mapLeads((l) => ({ ...l, chatHistory: [...l.chatHistory, { from: "staff", staffName, message, ...t }], lastContact: t.date }), leadId);
     },
-    assignLead: (leadId, staffName) =>
-      setLeads((p) => p.map((l) => (l.id === leadId ? { ...l, assignedTo: staffName } : l))),
-    updateLeadNotes: (leadId, notes) =>
-      setLeads((p) => p.map((l) => (l.id === leadId ? { ...l, notes } : l))),
-    addLead: (lead) => setLeads((p) => [lead, ...p]),
+    assignLead: (leadId, staffName) => mapLeads((l) => ({ ...l, assignedTo: staffName }), leadId),
+    updateLeadNotes: (leadId, notes) => mapLeads((l) => ({ ...l, notes }), leadId),
+    addLead: (lead) => {
+      setLeads((p) => [lead, ...p]);
+      void supabase.from("leads").insert({
+        id: lead.id, project_id: lead.projectId, name: lead.name, email: lead.email, phone: lead.phone,
+        source: lead.source, service_interest: lead.serviceInterest as any, status: lead.status,
+        assigned_to: lead.assignedTo, notes: lead.notes, created_at_text: lead.createdAt,
+        last_contact: lead.lastContact, ip_address: lead.ipAddress, location: lead.location,
+        chat_history: lead.chatHistory as any,
+      });
+    },
 
     updateStageStatus: (projectId, stageName, status) =>
-      setProjects((p) =>
-        p.map((pr) =>
-          pr.id === projectId
-            ? { ...pr, stages: pr.stages.map((s) => (s.name === stageName ? { ...s, status } : s)) }
-            : pr,
-        ),
-      ),
+      mapProjects((pr) => ({ ...pr, stages: pr.stages.map((s) => (s.name === stageName ? { ...s, status } : s)) }), projectId),
     updateStageNotes: (projectId, stageName, notes) =>
-      setProjects((p) =>
-        p.map((pr) =>
-          pr.id === projectId
-            ? { ...pr, stages: pr.stages.map((s) => (s.name === stageName ? { ...s, notes } : s)) }
-            : pr,
-        ),
-      ),
+      mapProjects((pr) => ({ ...pr, stages: pr.stages.map((s) => (s.name === stageName ? { ...s, notes } : s)) }), projectId),
     assignStageToProduction: (projectId, stageName, staffName) =>
-      setProjects((p) =>
-        p.map((pr) =>
-          pr.id === projectId
-            ? { ...pr, stages: pr.stages.map((s) => (s.name === stageName ? { ...s, assignedTo: staffName } : s)) }
-            : pr,
-        ),
-      ),
-    addTask: (projectId, task) =>
-      setProjects((p) =>
-        p.map((pr) => (pr.id === projectId ? { ...pr, tasks: [...pr.tasks, task] } : pr)),
-      ),
+      mapProjects((pr) => ({ ...pr, stages: pr.stages.map((s) => (s.name === stageName ? { ...s, assignedTo: staffName } : s)) }), projectId),
+    addTask: (projectId, task) => mapProjects((pr) => ({ ...pr, tasks: [...pr.tasks, task] }), projectId),
     updateTaskStatus: (taskId, status) =>
-      setProjects((p) =>
-        p.map((pr) => ({
-          ...pr,
-          tasks: pr.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)),
-        })),
-      ),
+      setProjects((p) => p.map((pr) => {
+        if (!pr.tasks.some((t) => t.id === taskId)) return pr;
+        const next = { ...pr, tasks: pr.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)) };
+        persistProject(next);
+        return next;
+      })),
     submitTask: (taskId, submittedNotes) =>
-      setProjects((p) =>
-        p.map((pr) => ({
-          ...pr,
-          tasks: pr.tasks.map((t) => (t.id === taskId ? { ...t, status: "Submitted" as const, submittedNotes } : t)),
-        })),
-      ),
+      setProjects((p) => p.map((pr) => {
+        if (!pr.tasks.some((t) => t.id === taskId)) return pr;
+        const next = { ...pr, tasks: pr.tasks.map((t) => (t.id === taskId ? { ...t, status: "Submitted" as const, submittedNotes } : t)) };
+        persistProject(next);
+        return next;
+      })),
     approveTask: (taskId) =>
-      setProjects((p) =>
-        p.map((pr) => ({
-          ...pr,
-          tasks: pr.tasks.map((t) => (t.id === taskId ? { ...t, status: "Completed" as const } : t)),
-        })),
-      ),
+      setProjects((p) => p.map((pr) => {
+        if (!pr.tasks.some((t) => t.id === taskId)) return pr;
+        const next = { ...pr, tasks: pr.tasks.map((t) => (t.id === taskId ? { ...t, status: "Completed" as const } : t)) };
+        persistProject(next);
+        return next;
+      })),
     addInvoice: (projectId, invoice) =>
-      setProjects((p) =>
-        p.map((pr) => (pr.id === projectId ? { ...pr, invoices: [...pr.invoices, invoice] } : pr)),
-      ),
+      mapProjects((pr) => ({ ...pr, invoices: [...pr.invoices, invoice] }), projectId),
     updateInvoiceStatus: (projectId, invoiceId, status, method) =>
       setProjects((p) =>
         p.map((pr) => {
