@@ -20,5 +20,9 @@ export function PortalGate({ children }: { children: ReactNode }) {
     );
   }
 
-  return <PortalLayout>{children}</PortalLayout>;
+  return (
+    <PortalDataProvider>
+      <PortalLayout>{children}</PortalLayout>
+    </PortalDataProvider>
+  );
 }
