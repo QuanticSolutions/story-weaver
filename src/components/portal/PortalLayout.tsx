@@ -14,7 +14,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { sampleClient } from "@/data/sampleClient";
+import { useClient } from "@/context/PortalDataContext";
 import { usePortalAuth } from "@/context/PortalAuthContext";
 import { cn } from "@/lib/utils";
 
