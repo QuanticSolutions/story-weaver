@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 
 export const Route = createFileRoute("/portal/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — AWH Client Portal" }, { name: "robots", content: "noindex" }] }),

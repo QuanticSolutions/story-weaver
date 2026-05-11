@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Video, Paperclip, Send, Lock } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 
 export const Route = createFileRoute("/portal/messages")({
   head: () => ({ meta: [{ title: "Messages — AWH Client Portal" }, { name: "robots", content: "noindex" }] }),

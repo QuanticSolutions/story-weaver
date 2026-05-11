@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
