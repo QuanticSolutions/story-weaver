@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Upload, FileText, Image as ImageIcon, Shield, Download, Eye, Loader2 } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { usePortalData, useClient } from "@/context/PortalDataContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
