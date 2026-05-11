@@ -81,14 +81,74 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     };
   };
 
-  // ---------- Live chat: sync DB sessions+messages into `chats` ----------
+  // ---------- DB sync: leads, projects, notifications ----------
   useEffect(() => {
     let cancelled = false;
-    const load = async () => {
+    const loadCore = async () => {
+      const [{ data: leadRows }, { data: projectRows }, { data: notifRows }] = await Promise.all([
+        supabase.from("leads").select("*").order("created_at", { ascending: false }),
+        supabase.from("projects").select("*").order("created_at", { ascending: false }),
+        supabase.from("crm_notifications").select("*").order("created_at", { ascending: false }),
+      ]);
+      if (cancelled) return;
+
+      if (leadRows && leadRows.length) {
+        const mapped: Lead[] = leadRows.map((l: any) => ({
+          id: l.id, projectId: l.project_id || "", name: l.name, email: l.email, phone: l.phone,
+          source: l.source, serviceInterest: l.service_interest || [],
+          status: l.status, assignedTo: l.assigned_to,
+          notes: l.notes || "", createdAt: l.created_at_text || fmtTime(l.created_at).date,
+          lastContact: l.last_contact, ipAddress: l.ip_address || "0.0.0.0", location: l.location || "Unknown",
+          chatHistory: l.chat_history || [],
+        }));
+        setLeads(mapped);
+      }
+
+      if (projectRows && projectRows.length) {
+        const mapped: Project[] = projectRows.map((p: any) => ({
+          id: p.id, clientName: p.client_name, clientEmail: p.client_email, clientId: p.client_id_text || "",
+          bookTitle: p.book_title, genre: p.genre, assignedManager: p.assigned_manager || "",
+          assignedProduction: p.assigned_production || [],
+          startDate: p.start_date || "", estimatedCompletion: p.estimated_completion || "",
+          totalValue: Number(p.total_value) || 0, amountPaid: Number(p.amount_paid) || 0, outstanding: Number(p.outstanding) || 0,
+          health: p.health,
+          stages: p.stages || [], invoices: p.invoices || [],
+          ndaSigned: p.nda_signed, ndaSignedAt: p.nda_signed_at, ndaSignedBy: p.nda_signed_by,
+          contractSigned: p.contract_signed, contractSignedAt: p.contract_signed_at, contractSignedBy: p.contract_signed_by,
+          tasks: p.tasks || [], internalNotes: p.internal_notes || [], messages: p.messages || [],
+        }));
+        setProjects(mapped);
+      }
+
+      if (notifRows && notifRows.length) {
+        const mapped: Notification[] = notifRows.map((n: any) => {
+          const t = fmtTime(n.created_at);
+          return {
+            id: typeof n.id === "string" ? Math.abs(n.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0)) : n.id,
+            type: n.type, message: n.message, time: t.time, date: t.date, read: !!n.read,
+            targetRole: n.target_roles || [], link: n.link || undefined,
+          };
+        });
+        setNotifications(mapped);
+      }
+    };
+    loadCore();
+
+    const chatChan = supabase
+      .channel("chat-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "chat_sessions" }, () => loadChats())
+      .on("postgres_changes", { event: "*", schema: "public", table: "chat_messages" }, () => loadChats())
+      .subscribe();
+    const coreChan = supabase
+      .channel("crm-core")
+      .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, loadCore)
+      .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, loadCore)
+      .on("postgres_changes", { event: "*", schema: "public", table: "crm_notifications" }, loadCore)
+      .subscribe();
+
+    const loadChats = async () => {
       const { data: sessions } = await supabase
-        .from("chat_sessions")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .from("chat_sessions").select("*").order("created_at", { ascending: false });
       if (!sessions || cancelled) return;
       const ids = sessions.map((s: any) => s.id);
       const { data: msgs } = ids.length
@@ -99,16 +159,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
         const sm = (msgs || []).filter((m: any) => m.session_id === s.id);
         const t = fmtTime(s.created_at);
         return {
-          id: s.id,
-          leadId: s.lead_id,
-          visitorName: s.visitor_name,
-          visitorEmail: s.visitor_email,
-          visitorPhone: s.visitor_phone,
-          ipAddress: s.ip_address || "0.0.0.0",
-          location: s.location || "Unknown — Browser Session",
-          startedAt: `${t.date} ${t.time}`,
-          status: (s.status as Chat["status"]) || "Waiting",
-          assignedStaff: s.assigned_staff,
+          id: s.id, leadId: s.lead_id, visitorName: s.visitor_name, visitorEmail: s.visitor_email, visitorPhone: s.visitor_phone,
+          ipAddress: s.ip_address || "0.0.0.0", location: s.location || "Unknown — Browser Session",
+          startedAt: `${t.date} ${t.time}`, status: (s.status as Chat["status"]) || "Waiting", assignedStaff: s.assigned_staff,
           unread: sm.filter((m: any) => m.sender === "visitor").length,
           messages: sm.map((m: any) => ({ from: m.sender, staffName: m.staff_name || undefined, message: m.message, ...fmtTime(m.created_at) })),
         };
@@ -118,19 +171,15 @@ export function CRMProvider({ children }: { children: ReactNode }) {
         return [...liveChats, ...seeds];
       });
     };
-    load();
-
-    const channel = supabase
-      .channel("chat-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "chat_sessions" }, () => load())
-      .on("postgres_changes", { event: "*", schema: "public", table: "chat_messages" }, () => load())
-      .subscribe();
+    loadChats();
 
     return () => {
       cancelled = true;
-      supabase.removeChannel(channel);
+      supabase.removeChannel(chatChan);
+      supabase.removeChannel(coreChan);
     };
   }, []);
+
 
 
   const value: CRMContextValue = {
