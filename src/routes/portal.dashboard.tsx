@@ -244,6 +244,7 @@ function StatBody({
 }
 
 function Pipeline() {
+  const sampleClient = useClient();
   return (
     <div>
       {/* Desktop horizontal */}
