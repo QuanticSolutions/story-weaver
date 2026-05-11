@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+// state-free
 import { motion } from "framer-motion";
 import { GitBranch, CreditCard, MessageSquare, Bell } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
