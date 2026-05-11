@@ -182,6 +182,38 @@ export function CRMProvider({ children }: { children: ReactNode }) {
 
 
 
+  const persistLead = (lead: Lead) => {
+    void supabase.from("leads").update({
+      status: lead.status, assigned_to: lead.assignedTo, notes: lead.notes,
+      last_contact: lead.lastContact, chat_history: lead.chatHistory as any,
+    }).eq("id", lead.id);
+  };
+  const persistProject = (pr: Project) => {
+    void supabase.from("projects").update({
+      stages: pr.stages as any, tasks: pr.tasks as any, invoices: pr.invoices as any,
+      internal_notes: pr.internalNotes as any, messages: (pr.messages || []) as any,
+      amount_paid: pr.amountPaid, outstanding: pr.outstanding, total_value: pr.totalValue,
+      nda_signed: pr.ndaSigned, nda_signed_at: pr.ndaSignedAt, nda_signed_by: pr.ndaSignedBy,
+      contract_signed: pr.contractSigned, contract_signed_at: pr.contractSignedAt, contract_signed_by: pr.contractSignedBy,
+      assigned_manager: pr.assignedManager, assigned_production: pr.assignedProduction as any,
+      health: pr.health,
+    }).eq("id", pr.id);
+  };
+  const mapLeads = (updater: (l: Lead) => Lead, targetId: string) =>
+    setLeads((p) => p.map((l) => {
+      if (l.id !== targetId) return l;
+      const next = updater(l);
+      persistLead(next);
+      return next;
+    }));
+  const mapProjects = (updater: (pr: Project) => Project, targetId: string) =>
+    setProjects((p) => p.map((pr) => {
+      if (pr.id !== targetId) return pr;
+      const next = updater(pr);
+      persistProject(next);
+      return next;
+    }));
+
   const value: CRMContextValue = {
     leads,
     projects,
