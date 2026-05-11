@@ -120,7 +120,7 @@ function FileGrid({ files }: { files: typeof sampleClient.files }) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => toast.success("File downloaded", { description: file.name })}
+              onClick={() => downloadFile(file.id)}
               className="border-brand-red/30 text-brand-red hover:bg-brand-red hover:text-white"
             >
               <Download className="h-3.5 w-3.5" />
