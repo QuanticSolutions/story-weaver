@@ -21,9 +21,10 @@ type Notif = (typeof sampleClient.notifications)[number];
 
 function NotificationsPage() {
   const sampleClient = useClient();
-  const [items, setItems] = useState<Notif[]>(sampleClient.notifications);
+  const { markAllRead: dbMarkAll, markNotificationRead } = usePortalData();
+  const items = sampleClient.notifications;
 
-  const markAllRead = () => setItems(items.map((i) => ({ ...i, read: true })));
+  const markAllRead = () => { void dbMarkAll(); };
 
   const filterBy = (type?: string, unreadOnly?: boolean) =>
     items.filter((i) => (type ? i.type === type : true) && (unreadOnly ? !i.read : true));
