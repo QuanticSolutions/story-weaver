@@ -82,6 +82,7 @@ function FilesPage() {
 }
 
 function FileGrid({ files }: { files: typeof sampleClient.files }) {
+  const { downloadFile } = usePortalData();
   if (files.length === 0) {
     return <div className="card-portal text-center text-sm text-navy/50">No files in this category yet.</div>;
   }
