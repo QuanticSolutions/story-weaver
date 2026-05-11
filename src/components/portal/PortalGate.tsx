@@ -2,6 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { usePortalAuth } from "@/context/PortalAuthContext";
 import { PortalLayout } from "@/components/portal/PortalLayout";
+import { PortalDataProvider } from "@/context/PortalDataContext";
 
 export function PortalGate({ children }: { children: ReactNode }) {
   const { isLoggedIn } = usePortalAuth();
@@ -19,5 +20,9 @@ export function PortalGate({ children }: { children: ReactNode }) {
     );
   }
 
-  return <PortalLayout>{children}</PortalLayout>;
+  return (
+    <PortalDataProvider>
+      <PortalLayout>{children}</PortalLayout>
+    </PortalDataProvider>
+  );
 }

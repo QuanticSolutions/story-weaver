@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Video, Paperclip, Send, Lock } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 
 export const Route = createFileRoute("/portal/messages")({
   head: () => ({ meta: [{ title: "Messages — AWH Client Portal" }, { name: "robots", content: "noindex" }] }),
@@ -17,7 +18,9 @@ export const Route = createFileRoute("/portal/messages")({
 type Msg = (typeof sampleClient.messages)[number];
 
 function MessagesPage() {
-  const [messages, setMessages] = useState<Msg[]>(sampleClient.messages);
+  const sampleClient = useClient();
+  const { sendMessage } = usePortalData();
+  const messages = sampleClient.messages;
   const [text, setText] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -25,21 +28,11 @@ function MessagesPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages.length]);
 
-  const send = () => {
+  const send = async () => {
     if (!text.trim()) return;
-    const now = new Date();
-    const newMsg: Msg = {
-      id: messages.length + 1,
-      from: sampleClient.name,
-      role: "Client",
-      avatar: sampleClient.avatar,
-      message: text.trim(),
-      date: now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
-      time: now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
-      fromClient: true,
-    };
-    setMessages([...messages, newMsg]);
+    const value = text.trim();
     setText("");
+    await sendMessage(value);
   };
 
   // Group by date

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Hash, User, Calendar, Clock, Check, GitBranch, FolderOpen } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
@@ -23,6 +24,7 @@ const statusStyles: Record<string, string> = {
 };
 
 function ProjectPage() {
+  const sampleClient = useClient();
   const completed = sampleClient.stages.filter((s) => s.status === "Completed").length;
   const total = sampleClient.stages.length;
   const pct = Math.round((completed / total) * 100);

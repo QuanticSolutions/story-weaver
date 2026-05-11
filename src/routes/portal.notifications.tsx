@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+// state-free
 import { motion } from "framer-motion";
 import { GitBranch, CreditCard, MessageSquare, Bell } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
@@ -19,9 +20,11 @@ export const Route = createFileRoute("/portal/notifications")({
 type Notif = (typeof sampleClient.notifications)[number];
 
 function NotificationsPage() {
-  const [items, setItems] = useState<Notif[]>(sampleClient.notifications);
+  const sampleClient = useClient();
+  const { markAllRead: dbMarkAll } = usePortalData();
+  const items = sampleClient.notifications;
 
-  const markAllRead = () => setItems(items.map((i) => ({ ...i, read: true })));
+  const markAllRead = () => { void dbMarkAll(); };
 
   const filterBy = (type?: string, unreadOnly?: boolean) =>
     items.filter((i) => (type ? i.type === type : true) && (unreadOnly ? !i.read : true));

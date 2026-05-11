@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { useClient, usePortalData } from "@/context/PortalDataContext";
 
 export const Route = createFileRoute("/portal/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — AWH Client Portal" }, { name: "robots", content: "noindex" }] }),
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/portal/dashboard")({
 });
 
 function DashboardPage() {
+  const sampleClient = useClient();
   const completed = sampleClient.stages.filter((s) => s.status === "Completed").length;
   const total = sampleClient.stages.length;
   const progress = Math.round((completed / total) * 100);
@@ -242,6 +244,7 @@ function StatBody({
 }
 
 function Pipeline() {
+  const sampleClient = useClient();
   return (
     <div>
       {/* Desktop horizontal */}

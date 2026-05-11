@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Upload, FileText, Image as ImageIcon, Shield, Download, Eye, Loader2 } from "lucide-react";
 import { PortalGate } from "@/components/portal/PortalGate";
 import { sampleClient } from "@/data/sampleClient";
+import { usePortalData, useClient } from "@/context/PortalDataContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -18,20 +19,20 @@ export const Route = createFileRoute("/portal/files")({
 });
 
 function FilesPage() {
+  const sampleClient = useClient();
+  const { uploadFile, downloadFile } = usePortalData();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
   const handleUpload = () => inputRef.current?.click();
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    setTimeout(() => {
-      setUploading(false);
-      toast.success("File uploaded", { description: file.name });
-      if (inputRef.current) inputRef.current.value = "";
-    }, 1500);
+    await uploadFile(file);
+    setUploading(false);
+    if (inputRef.current) inputRef.current.value = "";
   };
 
   const filterBy = (type?: string) =>
@@ -81,6 +82,7 @@ function FilesPage() {
 }
 
 function FileGrid({ files }: { files: typeof sampleClient.files }) {
+  const { downloadFile } = usePortalData();
   if (files.length === 0) {
     return <div className="card-portal text-center text-sm text-navy/50">No files in this category yet.</div>;
   }
@@ -118,7 +120,7 @@ function FileGrid({ files }: { files: typeof sampleClient.files }) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => toast.success("File downloaded", { description: file.name })}
+              onClick={() => downloadFile(file.id)}
               className="border-brand-red/30 text-brand-red hover:bg-brand-red hover:text-white"
             >
               <Download className="h-3.5 w-3.5" />

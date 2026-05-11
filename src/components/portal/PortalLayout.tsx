@@ -14,7 +14,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { sampleClient } from "@/data/sampleClient";
+import { useClient } from "@/context/PortalDataContext";
 import { usePortalAuth } from "@/context/PortalAuthContext";
 import { cn } from "@/lib/utils";
 
@@ -44,6 +44,7 @@ export function PortalLayout({ children }: { children: ReactNode }) {
   const { logout } = usePortalAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const sampleClient = useClient();
 
   const unreadNotifications = sampleClient.notifications.filter((n) => !n.read).length;
   const unreadMessages = 1;
