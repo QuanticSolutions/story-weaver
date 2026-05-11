@@ -21,7 +21,7 @@ type Notif = (typeof sampleClient.notifications)[number];
 
 function NotificationsPage() {
   const sampleClient = useClient();
-  const { markAllRead: dbMarkAll, markNotificationRead } = usePortalData();
+  const { markAllRead: dbMarkAll } = usePortalData();
   const items = sampleClient.notifications;
 
   const markAllRead = () => { void dbMarkAll(); };
