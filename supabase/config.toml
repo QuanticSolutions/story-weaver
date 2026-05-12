@@ -1,1 +1,4 @@
 project_id = "tknyrqcsltwjtqgenkjn"
+
+[functions.wise-api]
+verify_jwt = false
