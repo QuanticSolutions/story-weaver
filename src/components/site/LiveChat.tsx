@@ -51,12 +51,19 @@ export function LiveChat() {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "chat_messages", filter: `session_id=eq.${sessionId}` },
-        (payload) => setMessages((prev) => [...prev, payload.new as Msg]),
+        (payload) => {
+          const m = payload.new as Msg;
+          setMessages((prev) => (prev.some((x) => x.id === m.id) ? prev : [...prev, m]));
+        },
       )
       .subscribe();
 
+    // Polling fallback: ensures CRM replies appear even if a realtime event is missed
+    const poll = setInterval(load, 4000);
+
     return () => {
       cancelled = true;
+      clearInterval(poll);
       supabase.removeChannel(channel);
     };
   }, [sessionId]);
