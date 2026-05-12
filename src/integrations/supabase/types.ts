@@ -401,6 +401,87 @@ export type Database = {
         }
         Relationships: []
       }
+      wise_recipients: {
+        Row: {
+          account_details: Json | null
+          account_holder_name: string | null
+          country: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          user_id: string | null
+          wise_account_id: string | null
+        }
+        Insert: {
+          account_details?: Json | null
+          account_holder_name?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          user_id?: string | null
+          wise_account_id?: string | null
+        }
+        Update: {
+          account_details?: Json | null
+          account_holder_name?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          user_id?: string | null
+          wise_account_id?: string | null
+        }
+        Relationships: []
+      }
+      wise_transfers: {
+        Row: {
+          created_at: string
+          id: string
+          quote_id: string | null
+          recipient_id: string | null
+          reference: string | null
+          source_amount: number | null
+          source_currency: string | null
+          status: string | null
+          target_amount: number | null
+          target_currency: string | null
+          transfer_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          quote_id?: string | null
+          recipient_id?: string | null
+          reference?: string | null
+          source_amount?: number | null
+          source_currency?: string | null
+          status?: string | null
+          target_amount?: number | null
+          target_currency?: string | null
+          transfer_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          quote_id?: string | null
+          recipient_id?: string | null
+          reference?: string | null
+          source_amount?: number | null
+          source_currency?: string | null
+          status?: string | null
+          target_amount?: number | null
+          target_currency?: string | null
+          transfer_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
