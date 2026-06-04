@@ -1,9 +1,14 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "american-writer",
-  "compatibility_date": "2025-09-24", // Or use today's date
+  // Change "main" to point to the server file Vite just built
+  "main": "dist/server/server.js", 
+  
+  "assets": {
+    // This should point to your public/client assets folder (usually dist/client)
+    "directory": "dist/client", 
+    "binding": "ASSETS"
+  },
   "compatibility_flags": [
     "nodejs_compat"
-  ],
-  "main": "@tanstack/react-start/server-entry"
+  ]
 }
