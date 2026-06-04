@@ -62,12 +62,14 @@ const navByRole: Record<string, NavItem[]> = {
 };
 
 const roleLabel: Record<string, string> = {
+  admin: "Admin",
   project_manager: "Project Manager",
   salesperson: "Sales",
   production: "Production",
 };
 
 const roleBadgeColor: Record<string, string> = {
+  admin: "bg-purple-100 text-purple-700 border-purple-300",
   project_manager: "bg-brand-red/15 text-brand-red border-brand-red/30",
   salesperson: "bg-navy/15 text-navy border-navy/30",
   production: "bg-amber-100 text-amber-800 border-amber-300",
