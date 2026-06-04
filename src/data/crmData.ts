@@ -1,4 +1,4 @@
-export type CRMRole = "project_manager" | "salesperson" | "production";
+export type CRMRole = "project_manager" | "salesperson" | "production" | "admin";
 
 export interface CRMUser {
   id: string;

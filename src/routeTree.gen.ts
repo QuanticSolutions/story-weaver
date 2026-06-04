@@ -25,6 +25,7 @@ import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as PortalFilesRouteImport } from './routes/portal.files'
 import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
 import { Route as PortalBillingRouteImport } from './routes/portal.billing'
+import { Route as CrmUsersRouteImport } from './routes/crm.users'
 import { Route as CrmTeamRouteImport } from './routes/crm.team'
 import { Route as CrmTasksRouteImport } from './routes/crm.tasks'
 import { Route as CrmSettingsRouteImport } from './routes/crm.settings'
@@ -119,6 +120,11 @@ const PortalBillingRoute = PortalBillingRouteImport.update({
   path: '/portal/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CrmUsersRoute = CrmUsersRouteImport.update({
+  id: '/crm/users',
+  path: '/crm/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CrmTeamRoute = CrmTeamRouteImport.update({
   id: '/crm/team',
   path: '/crm/team',
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/crm/settings': typeof CrmSettingsRoute
   '/crm/tasks': typeof CrmTasksRoute
   '/crm/team': typeof CrmTeamRoute
+  '/crm/users': typeof CrmUsersRoute
   '/portal/billing': typeof PortalBillingRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/portal/files': typeof PortalFilesRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/crm/settings': typeof CrmSettingsRoute
   '/crm/tasks': typeof CrmTasksRoute
   '/crm/team': typeof CrmTeamRoute
+  '/crm/users': typeof CrmUsersRoute
   '/portal/billing': typeof PortalBillingRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/portal/files': typeof PortalFilesRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/crm/settings': typeof CrmSettingsRoute
   '/crm/tasks': typeof CrmTasksRoute
   '/crm/team': typeof CrmTeamRoute
+  '/crm/users': typeof CrmUsersRoute
   '/portal/billing': typeof PortalBillingRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/portal/files': typeof PortalFilesRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/crm/settings'
     | '/crm/tasks'
     | '/crm/team'
+    | '/crm/users'
     | '/portal/billing'
     | '/portal/dashboard'
     | '/portal/files'
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/crm/settings'
     | '/crm/tasks'
     | '/crm/team'
+    | '/crm/users'
     | '/portal/billing'
     | '/portal/dashboard'
     | '/portal/files'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/crm/settings'
     | '/crm/tasks'
     | '/crm/team'
+    | '/crm/users'
     | '/portal/billing'
     | '/portal/dashboard'
     | '/portal/files'
@@ -389,6 +401,7 @@ export interface RootRouteChildren {
   CrmSettingsRoute: typeof CrmSettingsRoute
   CrmTasksRoute: typeof CrmTasksRoute
   CrmTeamRoute: typeof CrmTeamRoute
+  CrmUsersRoute: typeof CrmUsersRoute
   PortalBillingRoute: typeof PortalBillingRoute
   PortalDashboardRoute: typeof PortalDashboardRoute
   PortalFilesRoute: typeof PortalFilesRoute
@@ -521,6 +534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalBillingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/crm/users': {
+      id: '/crm/users'
+      path: '/crm/users'
+      fullPath: '/crm/users'
+      preLoaderRoute: typeof CrmUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crm/team': {
       id: '/crm/team'
       path: '/crm/team'
@@ -629,6 +649,7 @@ const rootRouteChildren: RootRouteChildren = {
   CrmSettingsRoute: CrmSettingsRoute,
   CrmTasksRoute: CrmTasksRoute,
   CrmTeamRoute: CrmTeamRoute,
+  CrmUsersRoute: CrmUsersRoute,
   PortalBillingRoute: PortalBillingRoute,
   PortalDashboardRoute: PortalDashboardRoute,
   PortalFilesRoute: PortalFilesRoute,

@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Volume2,
+  Shield,
 } from "lucide-react";
 import { useCRMAuth } from "@/context/CRMAuthContext";
 import { useCRM } from "@/context/CRMContext";
@@ -23,6 +24,18 @@ import { cn } from "@/lib/utils";
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; badge?: "chat" | "notif" };
 
 const navByRole: Record<string, NavItem[]> = {
+  admin: [
+    { to: "/crm/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/crm/users", label: "User Management", icon: Shield },
+    { to: "/crm/leads", label: "Leads", icon: Users },
+    { to: "/crm/projects", label: "Projects", icon: Kanban },
+    { to: "/crm/tasks", label: "Tasks", icon: CheckSquare },
+    { to: "/crm/chat", label: "Live Chat", icon: MessageSquare, badge: "chat" },
+    { to: "/crm/contracts", label: "Contracts & NDAs", icon: FileText },
+    { to: "/crm/team", label: "Team", icon: Users2 },
+    { to: "/crm/notifications", label: "Notifications", icon: Bell, badge: "notif" },
+    { to: "/crm/settings", label: "Settings", icon: Settings },
+  ],
   project_manager: [
     { to: "/crm/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/crm/leads", label: "Leads", icon: Users },
@@ -49,12 +62,14 @@ const navByRole: Record<string, NavItem[]> = {
 };
 
 const roleLabel: Record<string, string> = {
+  admin: "Admin",
   project_manager: "Project Manager",
   salesperson: "Sales",
   production: "Production",
 };
 
 const roleBadgeColor: Record<string, string> = {
+  admin: "bg-purple-100 text-purple-700 border-purple-300",
   project_manager: "bg-brand-red/15 text-brand-red border-brand-red/30",
   salesperson: "bg-navy/15 text-navy border-navy/30",
   production: "bg-amber-100 text-amber-800 border-amber-300",
@@ -69,6 +84,7 @@ function pageTitleFor(path: string) {
   if (path.startsWith("/crm/contracts")) return "Contracts & NDAs";
   if (path.startsWith("/crm/team")) return "Team";
   if (path.startsWith("/crm/notifications")) return "Notifications";
+  if (path.startsWith("/crm/users")) return "User Management";
   if (path.startsWith("/crm/settings")) return "Settings";
   return "CRM";
 }
