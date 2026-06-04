@@ -84,6 +84,7 @@ function pageTitleFor(path: string) {
   if (path.startsWith("/crm/contracts")) return "Contracts & NDAs";
   if (path.startsWith("/crm/team")) return "Team";
   if (path.startsWith("/crm/notifications")) return "Notifications";
+  if (path.startsWith("/crm/users")) return "User Management";
   if (path.startsWith("/crm/settings")) return "Settings";
   return "CRM";
 }
