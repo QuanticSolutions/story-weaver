@@ -2,6 +2,7 @@
   "name": "american-writer",
   // Change "main" to point to the server file Vite just built
   "main": "dist/server/server.js", 
+  "compatibility_date":"2026-06-04"
   
   "assets": {
     // This should point to your public/client assets folder (usually dist/client)
