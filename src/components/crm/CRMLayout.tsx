@@ -24,6 +24,18 @@ import { cn } from "@/lib/utils";
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; badge?: "chat" | "notif" };
 
 const navByRole: Record<string, NavItem[]> = {
+  admin: [
+    { to: "/crm/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/crm/users", label: "User Management", icon: Shield },
+    { to: "/crm/leads", label: "Leads", icon: Users },
+    { to: "/crm/projects", label: "Projects", icon: Kanban },
+    { to: "/crm/tasks", label: "Tasks", icon: CheckSquare },
+    { to: "/crm/chat", label: "Live Chat", icon: MessageSquare, badge: "chat" },
+    { to: "/crm/contracts", label: "Contracts & NDAs", icon: FileText },
+    { to: "/crm/team", label: "Team", icon: Users2 },
+    { to: "/crm/notifications", label: "Notifications", icon: Bell, badge: "notif" },
+    { to: "/crm/settings", label: "Settings", icon: Settings },
+  ],
   project_manager: [
     { to: "/crm/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { to: "/crm/leads", label: "Leads", icon: Users },
