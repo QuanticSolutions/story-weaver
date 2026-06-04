@@ -241,6 +241,7 @@ export function CRMLayout({ children }: { children: ReactNode }) {
                 Active visitor
               </Link>
             )}
+            <ChatVoiceAlerts />
             <Link
               to="/crm/notifications"
               className="relative rounded-full p-2 text-navy/70 hover:bg-navy/5 hover:text-navy"
