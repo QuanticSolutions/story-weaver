@@ -1,13 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "american-writer",
-  "compatibility_date": "2025-09-24",
+  "compatibility_date": "2025-09-24", // Or use today's date
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "main": ".output/server/index.mjs",
-  "assets": {
-    "directory": ".output/public",
-    "binding": "ASSETS"
-  }
+  "main": "@tanstack/react-start/server-entry"
 }
