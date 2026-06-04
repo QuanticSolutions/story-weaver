@@ -25,7 +25,7 @@ export function CRMGate({ children, allowedRoles }: { children: ReactNode; allow
       </div>
     );
   }
-  if (allowedRoles && !allowedRoles.includes(crmUser.role)) {
+  if (!hasAccess) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-offwhite">
         <div className="text-sm text-navy/60">Redirecting…</div>
