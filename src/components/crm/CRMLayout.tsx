@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Volume2,
+  Shield,
 } from "lucide-react";
 import { useCRMAuth } from "@/context/CRMAuthContext";
 import { useCRM } from "@/context/CRMContext";
