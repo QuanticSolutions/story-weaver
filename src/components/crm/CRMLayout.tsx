@@ -20,6 +20,7 @@ import {
 import { useCRMAuth } from "@/context/CRMAuthContext";
 import { useCRM } from "@/context/CRMContext";
 import { cn } from "@/lib/utils";
+import { ChatVoiceAlerts } from "@/components/crm/ChatVoiceAlerts";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; badge?: "chat" | "notif" };
 
