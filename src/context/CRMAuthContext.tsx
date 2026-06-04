@@ -17,9 +17,11 @@ async function loadStaffUser(userId: string): Promise<CRMUser | null> {
     supabase.from("user_roles").select("role").eq("user_id", userId),
   ]);
   if (!profile || !roles) return null;
-  const staffRole = (roles as { role: CRMRole }[]).find((r) =>
-    ["project_manager", "salesperson", "production"].includes(r.role),
-  );
+  const allowed: CRMRole[] = ["admin", "project_manager", "salesperson", "production"];
+  // Prefer admin if present
+  const sorted = (roles as { role: CRMRole }[]).filter((r) => allowed.includes(r.role))
+    .sort((a, b) => allowed.indexOf(a.role) - allowed.indexOf(b.role));
+  const staffRole = sorted[0];
   if (!staffRole) return null;
   return {
     id: userId,

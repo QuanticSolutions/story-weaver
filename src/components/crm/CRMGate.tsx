@@ -7,13 +7,16 @@ export function CRMGate({ children, allowedRoles }: { children: ReactNode; allow
   const { crmUser } = useCRMAuth();
   const navigate = useNavigate();
 
+  // Admin bypasses all role gates
+  const hasAccess = crmUser && (crmUser.role === "admin" || !allowedRoles || allowedRoles.includes(crmUser.role));
+
   useEffect(() => {
     if (!crmUser) {
       navigate({ to: "/crm/login" });
-    } else if (allowedRoles && !allowedRoles.includes(crmUser.role)) {
+    } else if (!hasAccess) {
       navigate({ to: "/crm/dashboard" });
     }
-  }, [crmUser, navigate, allowedRoles]);
+  }, [crmUser, navigate, hasAccess]);
 
   if (!crmUser) {
     return (
@@ -22,7 +25,7 @@ export function CRMGate({ children, allowedRoles }: { children: ReactNode; allow
       </div>
     );
   }
-  if (allowedRoles && !allowedRoles.includes(crmUser.role)) {
+  if (!hasAccess) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-offwhite">
         <div className="text-sm text-navy/60">Redirecting…</div>
