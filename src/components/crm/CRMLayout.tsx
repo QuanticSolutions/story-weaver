@@ -20,6 +20,7 @@ import {
 import { useCRMAuth } from "@/context/CRMAuthContext";
 import { useCRM } from "@/context/CRMContext";
 import { cn } from "@/lib/utils";
+import { ChatVoiceAlerts } from "@/components/crm/ChatVoiceAlerts";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; badge?: "chat" | "notif" };
 
@@ -240,6 +241,7 @@ export function CRMLayout({ children }: { children: ReactNode }) {
                 Active visitor
               </Link>
             )}
+            <ChatVoiceAlerts />
             <Link
               to="/crm/notifications"
               className="relative rounded-full p-2 text-navy/70 hover:bg-navy/5 hover:text-navy"
