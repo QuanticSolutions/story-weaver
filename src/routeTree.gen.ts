@@ -9,55 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ServicesRouteImport } from './routes/services'
-import { Route as ProcessRouteImport } from './routes/process'
-import { Route as PortfolioRouteImport } from './routes/portfolio'
-import { Route as GetPublishedRouteImport } from './routes/get-published'
-import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PortalIndexRouteImport } from './routes/portal.index'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as GetPublishedRouteImport } from './routes/get-published'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as ProcessRouteImport } from './routes/process'
+import { Route as ServicesRouteImport } from './routes/services'
 import { Route as CrmIndexRouteImport } from './routes/crm.index'
-import { Route as PortalProjectRouteImport } from './routes/portal.project'
-import { Route as PortalProfileRouteImport } from './routes/portal.profile'
-import { Route as PortalNotificationsRouteImport } from './routes/portal.notifications'
-import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
-import { Route as PortalLoginRouteImport } from './routes/portal.login'
-import { Route as PortalFilesRouteImport } from './routes/portal.files'
-import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
-import { Route as PortalBillingRouteImport } from './routes/portal.billing'
-import { Route as CrmUsersRouteImport } from './routes/crm.users'
-import { Route as CrmTeamRouteImport } from './routes/crm.team'
-import { Route as CrmTasksRouteImport } from './routes/crm.tasks'
-import { Route as CrmSettingsRouteImport } from './routes/crm.settings'
-import { Route as CrmNotificationsRouteImport } from './routes/crm.notifications'
-import { Route as CrmLoginRouteImport } from './routes/crm.login'
-import { Route as CrmDashboardRouteImport } from './routes/crm.dashboard'
 import { Route as CrmContractsRouteImport } from './routes/crm.contracts'
-import { Route as CrmProjectsIndexRouteImport } from './routes/crm.projects.index'
-import { Route as CrmLeadsIndexRouteImport } from './routes/crm.leads.index'
+import { Route as CrmDashboardRouteImport } from './routes/crm.dashboard'
+import { Route as CrmLoginRouteImport } from './routes/crm.login'
+import { Route as CrmNotificationsRouteImport } from './routes/crm.notifications'
+import { Route as CrmSettingsRouteImport } from './routes/crm.settings'
+import { Route as CrmTasksRouteImport } from './routes/crm.tasks'
+import { Route as CrmTeamRouteImport } from './routes/crm.team'
+import { Route as CrmUsersRouteImport } from './routes/crm.users'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
+import { Route as PortalBillingRouteImport } from './routes/portal.billing'
+import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
+import { Route as PortalFilesRouteImport } from './routes/portal.files'
+import { Route as PortalLoginRouteImport } from './routes/portal.login'
+import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
+import { Route as PortalNotificationsRouteImport } from './routes/portal.notifications'
+import { Route as PortalProfileRouteImport } from './routes/portal.profile'
+import { Route as PortalProjectRouteImport } from './routes/portal.project'
 import { Route as CrmChatIndexRouteImport } from './routes/crm.chat.index'
-import { Route as CrmProjectsProjectIdRouteImport } from './routes/crm.projects.$projectId'
-import { Route as CrmLeadsLeadIdRouteImport } from './routes/crm.leads.$leadId'
 import { Route as CrmChatChatIdRouteImport } from './routes/crm.chat.$chatId'
+import { Route as CrmLeadsIndexRouteImport } from './routes/crm.leads.index'
+import { Route as CrmLeadsLeadIdRouteImport } from './routes/crm.leads.$leadId'
+import { Route as CrmProjectsIndexRouteImport } from './routes/crm.projects.index'
+import { Route as CrmProjectsProjectIdRouteImport } from './routes/crm.projects.$projectId'
 
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProcessRoute = ProcessRouteImport.update({
-  id: '/process',
-  path: '/process',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortfolioRoute = PortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GetPublishedRoute = GetPublishedRouteImport.update({
-  id: '/get-published',
-  path: '/get-published',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -65,14 +50,24 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const GetPublishedRoute = GetPublishedRouteImport.update({
+  id: '/get-published',
+  path: '/get-published',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalIndexRoute = PortalIndexRouteImport.update({
-  id: '/portal/',
-  path: '/portal/',
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcessRoute = ProcessRouteImport.update({
+  id: '/process',
+  path: '/process',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmIndexRoute = CrmIndexRouteImport.update({
@@ -80,74 +75,9 @@ const CrmIndexRoute = CrmIndexRouteImport.update({
   path: '/crm/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalProjectRoute = PortalProjectRouteImport.update({
-  id: '/portal/project',
-  path: '/portal/project',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalProfileRoute = PortalProfileRouteImport.update({
-  id: '/portal/profile',
-  path: '/portal/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalNotificationsRoute = PortalNotificationsRouteImport.update({
-  id: '/portal/notifications',
-  path: '/portal/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalMessagesRoute = PortalMessagesRouteImport.update({
-  id: '/portal/messages',
-  path: '/portal/messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalLoginRoute = PortalLoginRouteImport.update({
-  id: '/portal/login',
-  path: '/portal/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalFilesRoute = PortalFilesRouteImport.update({
-  id: '/portal/files',
-  path: '/portal/files',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalDashboardRoute = PortalDashboardRouteImport.update({
-  id: '/portal/dashboard',
-  path: '/portal/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalBillingRoute = PortalBillingRouteImport.update({
-  id: '/portal/billing',
-  path: '/portal/billing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmUsersRoute = CrmUsersRouteImport.update({
-  id: '/crm/users',
-  path: '/crm/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmTeamRoute = CrmTeamRouteImport.update({
-  id: '/crm/team',
-  path: '/crm/team',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmTasksRoute = CrmTasksRouteImport.update({
-  id: '/crm/tasks',
-  path: '/crm/tasks',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmSettingsRoute = CrmSettingsRouteImport.update({
-  id: '/crm/settings',
-  path: '/crm/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmNotificationsRoute = CrmNotificationsRouteImport.update({
-  id: '/crm/notifications',
-  path: '/crm/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmLoginRoute = CrmLoginRouteImport.update({
-  id: '/crm/login',
-  path: '/crm/login',
+const CrmContractsRoute = CrmContractsRouteImport.update({
+  id: '/crm/contracts',
+  path: '/crm/contracts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmDashboardRoute = CrmDashboardRouteImport.update({
@@ -155,19 +85,79 @@ const CrmDashboardRoute = CrmDashboardRouteImport.update({
   path: '/crm/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CrmContractsRoute = CrmContractsRouteImport.update({
-  id: '/crm/contracts',
-  path: '/crm/contracts',
+const CrmLoginRoute = CrmLoginRouteImport.update({
+  id: '/crm/login',
+  path: '/crm/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CrmProjectsIndexRoute = CrmProjectsIndexRouteImport.update({
-  id: '/crm/projects/',
-  path: '/crm/projects/',
+const CrmNotificationsRoute = CrmNotificationsRouteImport.update({
+  id: '/crm/notifications',
+  path: '/crm/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CrmLeadsIndexRoute = CrmLeadsIndexRouteImport.update({
-  id: '/crm/leads/',
-  path: '/crm/leads/',
+const CrmSettingsRoute = CrmSettingsRouteImport.update({
+  id: '/crm/settings',
+  path: '/crm/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmTasksRoute = CrmTasksRouteImport.update({
+  id: '/crm/tasks',
+  path: '/crm/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmTeamRoute = CrmTeamRouteImport.update({
+  id: '/crm/team',
+  path: '/crm/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmUsersRoute = CrmUsersRouteImport.update({
+  id: '/crm/users',
+  path: '/crm/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/portal/',
+  path: '/portal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalBillingRoute = PortalBillingRouteImport.update({
+  id: '/portal/billing',
+  path: '/portal/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalDashboardRoute = PortalDashboardRouteImport.update({
+  id: '/portal/dashboard',
+  path: '/portal/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalFilesRoute = PortalFilesRouteImport.update({
+  id: '/portal/files',
+  path: '/portal/files',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalLoginRoute = PortalLoginRouteImport.update({
+  id: '/portal/login',
+  path: '/portal/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalMessagesRoute = PortalMessagesRouteImport.update({
+  id: '/portal/messages',
+  path: '/portal/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalNotificationsRoute = PortalNotificationsRouteImport.update({
+  id: '/portal/notifications',
+  path: '/portal/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalProfileRoute = PortalProfileRouteImport.update({
+  id: '/portal/profile',
+  path: '/portal/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalProjectRoute = PortalProjectRouteImport.update({
+  id: '/portal/project',
+  path: '/portal/project',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmChatIndexRoute = CrmChatIndexRouteImport.update({
@@ -175,9 +165,14 @@ const CrmChatIndexRoute = CrmChatIndexRouteImport.update({
   path: '/crm/chat/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CrmProjectsProjectIdRoute = CrmProjectsProjectIdRouteImport.update({
-  id: '/crm/projects/$projectId',
-  path: '/crm/projects/$projectId',
+const CrmChatChatIdRoute = CrmChatChatIdRouteImport.update({
+  id: '/crm/chat/$chatId',
+  path: '/crm/chat/$chatId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmLeadsIndexRoute = CrmLeadsIndexRouteImport.update({
+  id: '/crm/leads/',
+  path: '/crm/leads/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmLeadsLeadIdRoute = CrmLeadsLeadIdRouteImport.update({
@@ -185,9 +180,14 @@ const CrmLeadsLeadIdRoute = CrmLeadsLeadIdRouteImport.update({
   path: '/crm/leads/$leadId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CrmChatChatIdRoute = CrmChatChatIdRouteImport.update({
-  id: '/crm/chat/$chatId',
-  path: '/crm/chat/$chatId',
+const CrmProjectsIndexRoute = CrmProjectsIndexRouteImport.update({
+  id: '/crm/projects/',
+  path: '/crm/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmProjectsProjectIdRoute = CrmProjectsProjectIdRouteImport.update({
+  id: '/crm/projects/$projectId',
+  path: '/crm/projects/$projectId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -422,32 +422,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/process': {
-      id: '/process'
-      path: '/process'
-      fullPath: '/process'
-      preLoaderRoute: typeof ProcessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portfolio': {
-      id: '/portfolio'
-      path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof PortfolioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/get-published': {
-      id: '/get-published'
-      path: '/get-published'
-      fullPath: '/get-published'
-      preLoaderRoute: typeof GetPublishedRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -457,18 +436,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/get-published': {
+      id: '/get-published'
+      path: '/get-published'
+      fullPath: '/get-published'
+      preLoaderRoute: typeof GetPublishedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/': {
-      id: '/portal/'
-      path: '/portal'
-      fullPath: '/portal/'
-      preLoaderRoute: typeof PortalIndexRouteImport
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/process': {
+      id: '/process'
+      path: '/process'
+      fullPath: '/process'
+      preLoaderRoute: typeof ProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm/': {
@@ -478,102 +471,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/project': {
-      id: '/portal/project'
-      path: '/portal/project'
-      fullPath: '/portal/project'
-      preLoaderRoute: typeof PortalProjectRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/profile': {
-      id: '/portal/profile'
-      path: '/portal/profile'
-      fullPath: '/portal/profile'
-      preLoaderRoute: typeof PortalProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/notifications': {
-      id: '/portal/notifications'
-      path: '/portal/notifications'
-      fullPath: '/portal/notifications'
-      preLoaderRoute: typeof PortalNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/messages': {
-      id: '/portal/messages'
-      path: '/portal/messages'
-      fullPath: '/portal/messages'
-      preLoaderRoute: typeof PortalMessagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/login': {
-      id: '/portal/login'
-      path: '/portal/login'
-      fullPath: '/portal/login'
-      preLoaderRoute: typeof PortalLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/files': {
-      id: '/portal/files'
-      path: '/portal/files'
-      fullPath: '/portal/files'
-      preLoaderRoute: typeof PortalFilesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/dashboard': {
-      id: '/portal/dashboard'
-      path: '/portal/dashboard'
-      fullPath: '/portal/dashboard'
-      preLoaderRoute: typeof PortalDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal/billing': {
-      id: '/portal/billing'
-      path: '/portal/billing'
-      fullPath: '/portal/billing'
-      preLoaderRoute: typeof PortalBillingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm/users': {
-      id: '/crm/users'
-      path: '/crm/users'
-      fullPath: '/crm/users'
-      preLoaderRoute: typeof CrmUsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm/team': {
-      id: '/crm/team'
-      path: '/crm/team'
-      fullPath: '/crm/team'
-      preLoaderRoute: typeof CrmTeamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm/tasks': {
-      id: '/crm/tasks'
-      path: '/crm/tasks'
-      fullPath: '/crm/tasks'
-      preLoaderRoute: typeof CrmTasksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm/settings': {
-      id: '/crm/settings'
-      path: '/crm/settings'
-      fullPath: '/crm/settings'
-      preLoaderRoute: typeof CrmSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm/notifications': {
-      id: '/crm/notifications'
-      path: '/crm/notifications'
-      fullPath: '/crm/notifications'
-      preLoaderRoute: typeof CrmNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm/login': {
-      id: '/crm/login'
-      path: '/crm/login'
-      fullPath: '/crm/login'
-      preLoaderRoute: typeof CrmLoginRouteImport
+    '/crm/contracts': {
+      id: '/crm/contracts'
+      path: '/crm/contracts'
+      fullPath: '/crm/contracts'
+      preLoaderRoute: typeof CrmContractsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm/dashboard': {
@@ -583,25 +485,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crm/contracts': {
-      id: '/crm/contracts'
-      path: '/crm/contracts'
-      fullPath: '/crm/contracts'
-      preLoaderRoute: typeof CrmContractsRouteImport
+    '/crm/login': {
+      id: '/crm/login'
+      path: '/crm/login'
+      fullPath: '/crm/login'
+      preLoaderRoute: typeof CrmLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crm/projects/': {
-      id: '/crm/projects/'
-      path: '/crm/projects'
-      fullPath: '/crm/projects/'
-      preLoaderRoute: typeof CrmProjectsIndexRouteImport
+    '/crm/notifications': {
+      id: '/crm/notifications'
+      path: '/crm/notifications'
+      fullPath: '/crm/notifications'
+      preLoaderRoute: typeof CrmNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crm/leads/': {
-      id: '/crm/leads/'
-      path: '/crm/leads'
-      fullPath: '/crm/leads/'
-      preLoaderRoute: typeof CrmLeadsIndexRouteImport
+    '/crm/settings': {
+      id: '/crm/settings'
+      path: '/crm/settings'
+      fullPath: '/crm/settings'
+      preLoaderRoute: typeof CrmSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/tasks': {
+      id: '/crm/tasks'
+      path: '/crm/tasks'
+      fullPath: '/crm/tasks'
+      preLoaderRoute: typeof CrmTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/team': {
+      id: '/crm/team'
+      path: '/crm/team'
+      fullPath: '/crm/team'
+      preLoaderRoute: typeof CrmTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/users': {
+      id: '/crm/users'
+      path: '/crm/users'
+      fullPath: '/crm/users'
+      preLoaderRoute: typeof CrmUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/': {
+      id: '/portal/'
+      path: '/portal'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/billing': {
+      id: '/portal/billing'
+      path: '/portal/billing'
+      fullPath: '/portal/billing'
+      preLoaderRoute: typeof PortalBillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/dashboard': {
+      id: '/portal/dashboard'
+      path: '/portal/dashboard'
+      fullPath: '/portal/dashboard'
+      preLoaderRoute: typeof PortalDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/files': {
+      id: '/portal/files'
+      path: '/portal/files'
+      fullPath: '/portal/files'
+      preLoaderRoute: typeof PortalFilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/login': {
+      id: '/portal/login'
+      path: '/portal/login'
+      fullPath: '/portal/login'
+      preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/messages': {
+      id: '/portal/messages'
+      path: '/portal/messages'
+      fullPath: '/portal/messages'
+      preLoaderRoute: typeof PortalMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/notifications': {
+      id: '/portal/notifications'
+      path: '/portal/notifications'
+      fullPath: '/portal/notifications'
+      preLoaderRoute: typeof PortalNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/profile': {
+      id: '/portal/profile'
+      path: '/portal/profile'
+      fullPath: '/portal/profile'
+      preLoaderRoute: typeof PortalProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/project': {
+      id: '/portal/project'
+      path: '/portal/project'
+      fullPath: '/portal/project'
+      preLoaderRoute: typeof PortalProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm/chat/': {
@@ -611,11 +597,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmChatIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crm/projects/$projectId': {
-      id: '/crm/projects/$projectId'
-      path: '/crm/projects/$projectId'
-      fullPath: '/crm/projects/$projectId'
-      preLoaderRoute: typeof CrmProjectsProjectIdRouteImport
+    '/crm/chat/$chatId': {
+      id: '/crm/chat/$chatId'
+      path: '/crm/chat/$chatId'
+      fullPath: '/crm/chat/$chatId'
+      preLoaderRoute: typeof CrmChatChatIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/leads/': {
+      id: '/crm/leads/'
+      path: '/crm/leads'
+      fullPath: '/crm/leads/'
+      preLoaderRoute: typeof CrmLeadsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm/leads/$leadId': {
@@ -625,11 +618,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CrmLeadsLeadIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crm/chat/$chatId': {
-      id: '/crm/chat/$chatId'
-      path: '/crm/chat/$chatId'
-      fullPath: '/crm/chat/$chatId'
-      preLoaderRoute: typeof CrmChatChatIdRouteImport
+    '/crm/projects/': {
+      id: '/crm/projects/'
+      path: '/crm/projects'
+      fullPath: '/crm/projects/'
+      preLoaderRoute: typeof CrmProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm/projects/$projectId': {
+      id: '/crm/projects/$projectId'
+      path: '/crm/projects/$projectId'
+      fullPath: '/crm/projects/$projectId'
+      preLoaderRoute: typeof CrmProjectsProjectIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -670,3 +670,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
