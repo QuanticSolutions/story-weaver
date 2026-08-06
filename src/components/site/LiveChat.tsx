@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { startVisitorChat, getVisitorMessages, sendVisitorMessage } from "@/lib/visitorChat.functions";
 
 const SESSION_KEY = "awh_chat_session_id";
+const TOKEN_KEY = "awh_chat_session_token";
 const VISITOR_KEY = "awh_chat_visitor";
 
 type Visitor = { name: string; email: string; phone: string };
-type Msg = { id: string; sender: "visitor" | "staff"; staff_name?: string | null; message: string; created_at: string };
+type Msg = { id: string; sender: string; staff_name?: string | null; message: string; created_at: string };
 
 function fmtTime(iso: string) {
   return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -17,56 +19,49 @@ export function LiveChat() {
   const [open, setOpen] = useState(false);
   const [visitor, setVisitor] = useState<Visitor | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const startChat = useServerFn(startVisitorChat);
+  const fetchMessages = useServerFn(getVisitorMessages);
+  const postMessage = useServerFn(sendVisitorMessage);
 
   // Restore visitor + session from localStorage
   useEffect(() => {
     try {
       const v = localStorage.getItem(VISITOR_KEY);
       const s = localStorage.getItem(SESSION_KEY);
+      const t = localStorage.getItem(TOKEN_KEY);
       if (v) setVisitor(JSON.parse(v));
       if (s) setSessionId(s);
+      if (t) setToken(t);
     } catch {}
   }, []);
 
-  // Load messages + subscribe to realtime when session exists
+  // Poll for messages while a session exists (visitors are not signed in,
+  // so the conversation is fetched through a token-authorised server endpoint)
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId || !token) return;
     let cancelled = false;
 
     const load = async () => {
-      const { data } = await supabase
-        .from("chat_messages")
-        .select("*")
-        .eq("session_id", sessionId)
-        .order("created_at", { ascending: true });
-      if (!cancelled && data) setMessages(data as Msg[]);
+      try {
+        const res = await fetchMessages({ data: { sessionId, token } });
+        if (!cancelled) setMessages(res.messages as Msg[]);
+      } catch {
+        /* session no longer valid */
+      }
     };
     load();
-
-    const channel = supabase
-      .channel(`chat-${sessionId}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "chat_messages", filter: `session_id=eq.${sessionId}` },
-        (payload) => {
-          const m = payload.new as Msg;
-          setMessages((prev) => (prev.some((x) => x.id === m.id) ? prev : [...prev, m]));
-        },
-      )
-      .subscribe();
-
-    // Polling fallback: ensures CRM replies appear even if a realtime event is missed
-    const poll = setInterval(load, 4000);
+    const poll = setInterval(load, 3000);
 
     return () => {
       cancelled = true;
       clearInterval(poll);
-      supabase.removeChannel(channel);
     };
-  }, [sessionId]);
+  }, [sessionId, token, fetchMessages]);
 
   useEffect(() => {
     if (open && scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -80,39 +75,33 @@ export function LiveChat() {
       email: String(fd.get("email") || "").trim(),
       phone: String(fd.get("phone") || "").trim(),
     };
-    const { data, error } = await supabase
-      .from("chat_sessions")
-      .insert({
-        visitor_name: v.name,
-        visitor_email: v.email,
-        visitor_phone: v.phone,
-        status: "Waiting",
-      })
-      .select()
-      .single();
-    if (error || !data) return;
-
-    await supabase.from("chat_messages").insert({
-      session_id: data.id,
-      sender: "staff",
-      staff_name: "AWH",
-      message: "Thanks for reaching out! A publishing consultant will be with you shortly.",
-    });
-
-    localStorage.setItem(VISITOR_KEY, JSON.stringify(v));
-    localStorage.setItem(SESSION_KEY, data.id);
-    setVisitor(v);
-    setSessionId(data.id);
+    try {
+      const res = await startChat({ data: v });
+      localStorage.setItem(VISITOR_KEY, JSON.stringify(v));
+      localStorage.setItem(SESSION_KEY, res.sessionId);
+      localStorage.setItem(TOKEN_KEY, res.token);
+      setVisitor(v);
+      setSessionId(res.sessionId);
+      setToken(res.token);
+    } catch {
+      /* ignore — user can retry */
+    }
   };
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = draft.trim();
-    if (!text || !sessionId) return;
+    if (!text || !sessionId || !token) return;
     setDraft("");
-    await supabase.from("chat_messages").insert({ session_id: sessionId, sender: "visitor", message: text });
-    await supabase.from("chat_sessions").update({ updated_at: new Date().toISOString() }).eq("id", sessionId);
+    try {
+      await postMessage({ data: { sessionId, token, message: text } });
+      const res = await fetchMessages({ data: { sessionId, token } });
+      setMessages(res.messages as Msg[]);
+    } catch {
+      /* ignore */
+    }
   };
+
 
   return (
     <div className="fixed bottom-5 right-5 z-40">
