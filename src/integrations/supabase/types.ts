@@ -62,6 +62,7 @@ export type Database = {
           visitor_email: string
           visitor_name: string
           visitor_phone: string
+          visitor_token: string
         }
         Insert: {
           assigned_staff?: string | null
@@ -75,6 +76,7 @@ export type Database = {
           visitor_email: string
           visitor_name: string
           visitor_phone: string
+          visitor_token?: string
         }
         Update: {
           assigned_staff?: string | null
@@ -88,6 +90,7 @@ export type Database = {
           visitor_email?: string
           visitor_name?: string
           visitor_phone?: string
+          visitor_token?: string
         }
         Relationships: []
       }
