@@ -77,7 +77,9 @@ function ContactPage() {
                 </span>
                 <div>
                   <p className="font-semibold text-navy">Office</p>
-                  <p className="text-sm text-navy/65">United States · Serving authors worldwide</p>
+                  <p className="text-sm text-navy/65">1500 
+                    N GRANT ST STE R
+                    DENVER, CO, 80203, USA</p>
                 </div>
               </li>
               <li className="flex gap-4">
