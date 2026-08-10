@@ -99,7 +99,9 @@ export function Footer() {
           <ul className="mt-5 space-y-3 text-sm">
             <li className="flex items-center gap-2.5">
               <MapPin className="size-4 text-brand-red" />
-              <span>United States</span>
+              <span>1500 N GRANT ST
+              STE R
+              DENVER, CO, 80203, USA</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Mail className="size-4 text-brand-red" />
