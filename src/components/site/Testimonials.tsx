@@ -13,10 +13,10 @@ const videos = [
 
 const reviews = [
   {
-    name: "Patricia M.",
-    book: "Threads of Memory",
+    name: "Arnold Barclay",
+    book: "Marketing Services",
     quote:
-      "From ghostwriting to global launch, the team handled every detail with care. Seeing my book on Amazon and Apple Books still feels surreal.",
+      "I used their book marketing service and had a very positive experience. The team was helpful and work hard to promote my book. I noticed better visibility online and appreciated their regular updates throughout the campaign.",
   },
   {
     name: "David K.",
@@ -52,54 +52,6 @@ export function Testimonials() {
             subtitle="Real stories from real authors we've helped publish."
             variant="dark"
           />
-        </div>
-
-        {/* Video slider */}
-        <div className="mt-14">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-display text-2xl font-semibold text-white">Video Testimonials</h3>
-            <div className="flex gap-2">
-              <button
-                onClick={() => scroll(-1)}
-                aria-label="Previous"
-                className="flex size-10 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10"
-              >
-                <ChevronLeft className="size-5" />
-              </button>
-              <button
-                onClick={() => scroll(1)}
-                aria-label="Next"
-                className="flex size-10 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10"
-              >
-                <ChevronRight className="size-5" />
-              </button>
-            </div>
-          </div>
-          <div
-            ref={trackRef}
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {videos.map((v) => (
-              <motion.div
-                key={v.author}
-                whileHover={{ y: -4 }}
-                className="glass-light glare min-w-[300px] snap-start overflow-hidden rounded-[20px] sm:min-w-[360px]"
-              >
-                <div className="relative aspect-video bg-gradient-to-br from-navy to-brand-red">
-                  <button
-                    aria-label="Play video"
-                    className="absolute inset-0 m-auto flex size-16 items-center justify-center rounded-full bg-white/95 text-brand-red shadow-xl transition hover:scale-105"
-                  >
-                    <Play className="size-7 fill-current" />
-                  </button>
-                </div>
-                <div className="p-5">
-                  <p className="font-display text-xl font-semibold text-white">{v.author}</p>
-                  <p className="text-sm italic text-white/65">{v.book}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
 
         {/* Written reviews */}
