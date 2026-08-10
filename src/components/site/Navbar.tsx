@@ -40,7 +40,7 @@ export function Navbar() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5">
-          <img src={logo} alt="American Writers Hub" className="h-9 w-auto" />
+          <img src={logo} alt="American Writers Hub" className="h-12 w-auto" />
         </Link>
 
         <ul className="hidden items-center gap-7 lg:flex">
