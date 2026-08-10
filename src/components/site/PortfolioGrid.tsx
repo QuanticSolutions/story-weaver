@@ -1,27 +1,50 @@
 import { useState } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import roadToHeaven from "@/assets/portfolio/road-to-heaven.jpg";
+import maybe from "@/assets/portfolio/maybe.jpg";
+import sacredFlowers from "@/assets/portfolio/sacred-language-flowers.jpg";
+import giantDepressionPink from "@/assets/portfolio/giant-depression-pink.jpg";
+import ageWontDictate from "@/assets/portfolio/age-wont-dictate.jpg";
+import giantDepression from "@/assets/portfolio/giant-depression.jpg";
+import proofLifeBeLivin from "@/assets/portfolio/proof-life-be-livin.jpg";
+import proofNeverSerious from "@/assets/portfolio/proof-never-serious.jpg";
+import proofHappiness from "@/assets/portfolio/proof-happiness-choice.jpg";
+import proofImSexy from "@/assets/portfolio/proof-im-sexy.jpg";
+import proofStandard from "@/assets/portfolio/proof-standard.jpg";
+import pubAgeWontDictate from "@/assets/portfolio/pub-age-wont-dictate.jpg";
+import pubRoadToHeaven from "@/assets/portfolio/pub-road-to-heaven.jpg";
+import pubSacredFlowers from "@/assets/portfolio/pub-sacred-flowers.jpg";
+import pubGiantDepression from "@/assets/portfolio/pub-giant-depression.jpg";
 
 export type PortfolioItem = {
+  id: string;
   title: string;
   genre: string;
   category: string;
-  gradient: string;
+  image?: string;
+  gradient?: string;
 };
 
 const items: PortfolioItem[] = [
-  { title: "The Last Cartographer", genre: "Literary Fiction", category: "Ghostwriting", gradient: "from-navy to-brand-red" },
-  { title: "Quiet Empires", genre: "Business", category: "Cover Design", gradient: "from-brand-red to-navy" },
-  { title: "Whispers of Cedar", genre: "Memoir", category: "Formatting", gradient: "from-navy to-navy-deep" },
-  { title: "Blueprints of Tomorrow", genre: "Self-Help", category: "Marketing", gradient: "from-brand-red-dark to-navy" },
-  { title: "Maya's Garden", genre: "Children's", category: "Author Websites", gradient: "from-gold/70 to-brand-red" },
-  { title: "Threads of Memory", genre: "Romance", category: "Cover Design", gradient: "from-brand-red to-brand-red-dark" },
-  { title: "The Founder's Edge", genre: "Business", category: "Ghostwriting", gradient: "from-navy-deep to-brand-red" },
-  { title: "Echoes in the Pines", genre: "Thriller", category: "Marketing", gradient: "from-navy to-brand-red-dark" },
-  { title: "A Quiet Faith", genre: "Spirituality", category: "Formatting", gradient: "from-navy to-gold/60" },
+  { id: "cover-road-to-heaven", title: "Road to Heaven", genre: "Inspirational Fiction", category: "Cover Design", image: roadToHeaven },
+  { id: "cover-maybe", title: "Maybe", genre: "Children's", category: "Cover Design", image: maybe },
+  { id: "cover-sacred-flowers", title: "The Sacred Language of Flowers", genre: "Poetry", category: "Cover Design", image: sacredFlowers },
+  { id: "cover-depression-pink", title: "Slaying the Giant of Depression", genre: "Self-Help", category: "Cover Design", image: giantDepressionPink },
+  { id: "cover-age-wont-dictate", title: "Age Won't Dictate My Achievements", genre: "Memoir", category: "Cover Design", image: ageWontDictate },
+  { id: "cover-depression-dark", title: "Slaying the Giant of Depression", genre: "Self-Help", category: "Cover Design", image: giantDepression },
+  { id: "proof-life-be-livin", title: "Life Be Livin'", genre: "Personal Essay", category: "Proofreading", image: proofLifeBeLivin },
+  { id: "proof-never-serious", title: "It's Never Really That Serious", genre: "Self-Help", category: "Proofreading", image: proofNeverSerious },
+  { id: "proof-happiness", title: "Happiness Is A Choice", genre: "Motivational", category: "Proofreading", image: proofHappiness },
+  { id: "proof-im-sexy", title: "I'm Sexy. It Is What It Is.", genre: "Self-Love", category: "Proofreading", image: proofImSexy },
+  { id: "proof-standard", title: "The Standard Is The Standard", genre: "Motivational", category: "Proofreading", image: proofStandard },
+  { id: "pub-age-wont-dictate", title: "Age Won't Dictate My Achievements", genre: "Memoir", category: "Published", image: pubAgeWontDictate },
+  { id: "pub-road-to-heaven", title: "Road to Heaven", genre: "Romantic Comedy", category: "Published", image: pubRoadToHeaven },
+  { id: "pub-sacred-flowers", title: "The Sacred Language of Flowers", genre: "Poetry", category: "Published", image: pubSacredFlowers },
+  { id: "pub-depression", title: "Slaying the Giant of Depression", genre: "Christian Self-Help", category: "Published", image: pubGiantDepression },
 ];
 
-const filters = ["All", "Ghostwriting", "Cover Design", "Formatting", "Marketing", "Author Websites"];
+const filters = ["All", "Cover Design", "Proofreading", "Published"];
 
 export function PortfolioGrid({ compact = false }: { compact?: boolean }) {
   const [filter, setFilter] = useState("All");
@@ -59,7 +82,7 @@ export function PortfolioGrid({ compact = false }: { compact?: boolean }) {
         <AnimatePresence mode="popLayout">
           {(compact ? visible.slice(0, 6) : visible).map((item) => (
             <motion.article
-              key={item.title}
+              key={item.id}
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -70,8 +93,17 @@ export function PortfolioGrid({ compact = false }: { compact?: boolean }) {
             >
               <div className="relative overflow-hidden">
                 <div
-                  className={`relative aspect-[3/4] bg-gradient-to-br ${item.gradient} p-6 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.06]`}
+                  className={`relative aspect-[3/4] ${item.image ? "bg-navy" : `bg-gradient-to-br ${item.gradient}`} p-6 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.06]`}
                 >
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  )}
+                  {item.image && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30" />}
                   {/* Stylized book spine line */}
                   <div className="absolute inset-y-0 left-3 w-px bg-white/15" />
                   <div className="absolute inset-x-6 top-6 font-accent text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
