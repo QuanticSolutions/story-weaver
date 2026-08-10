@@ -22,7 +22,7 @@ export function Navbar() {
   const bg = useTransform(
     scrollY,
     [0, 60],
-    ["rgba(255, 255, 255, 0.75)", "rgba(255, 255, 255, 1)"]
+    ["rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 1)"]
   );
   const blur = useTransform(scrollY, [0, 60], ["blur(20px)", "blur(28px)"]);
   const shadow = useTransform(
