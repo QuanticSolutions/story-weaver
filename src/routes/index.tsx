@@ -35,7 +35,7 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <HomeMacbookSection />
+      {/* <HomeMacbookSection /> */}
       <section className="relative overflow-hidden bg-white py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <p className="label-eyebrow text-center text-brand-red">
