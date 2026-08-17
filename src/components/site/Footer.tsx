@@ -38,7 +38,7 @@ export function Footer() {
       <div className="mx-auto h-px max-w-7xl bg-brand-red/70" />
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
-           <Link to="/" className="flex items-center gap-2.5"> <img src={logo_white} alt="American Writers Hub" className="h-12 w-auto" /> </Link>
+           <Link to="/" className="flex items-center gap-2.5"> <img src={logo_white} alt="American Writers Hub" className="h-32 w-auto" /> </Link>
           <p className="mt-4 text-sm leading-relaxed text-white/65">
             Turning stories into published realities, one author at a time.
           </p>
