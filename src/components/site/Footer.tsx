@@ -11,6 +11,7 @@ import {
   Phone,
   MessageCircle,
 } from "lucide-react";
+import logo_white from "@/assets/logo-white.png"; 
 
 export function Footer() {
   const services = [
@@ -37,14 +38,7 @@ export function Footer() {
       <div className="mx-auto h-px max-w-7xl bg-brand-red/70" />
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex size-9 items-center justify-center rounded-md bg-brand-red text-white">
-              <BookOpen className="size-5" />
-            </span>
-            <span className="font-serif text-lg font-bold text-white">
-              American Writers Hub
-            </span>
-          </Link>
+           <Link to="/" className="flex items-center gap-2.5"> <img src={logo_white} alt="American Writers Hub" className="h-12 w-auto" /> </Link>
           <p className="mt-4 text-sm leading-relaxed text-white/65">
             Turning stories into published realities, one author at a time.
           </p>
