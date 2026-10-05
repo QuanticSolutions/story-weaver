@@ -68,7 +68,7 @@ function ContactPage() {
                 </span>
                 <div>
                   <p className="font-semibold text-navy">Phone</p>
-                  <p className="text-sm text-navy/65">+1 (800) 000-0000</p>
+                  <p className="text-sm text-navy/65">+1 (251) 279-7481</p>
                 </div>
               </li>
               <li className="flex gap-4">
