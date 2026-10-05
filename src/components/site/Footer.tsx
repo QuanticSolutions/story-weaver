@@ -43,14 +43,14 @@ export function Footer() {
             Turning stories into published realities, one author at a time.
           </p>
           <div className="mt-5 flex gap-3">
-            {[Facebook, Instagram, Youtube, Twitter, Linkedin].map((Icon, i) => (
+            {[{ icon: Facebook, link: "https://www.facebook.com/share/1FPwJqeBXS/?mibextid=wwXlfr" }, { icon: Instagram, link: "https://instagram.com/americanwritershub06?stkn=dnZja21xbXJrdG5q"}].map((Icon, i) => (
               <a
                 key={i}
-                href="#"
+                href={Icon.link}
                 aria-label="Social link"
                 className="flex size-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:border-brand-red hover:bg-brand-red hover:text-white"
               >
-                <Icon className="size-4" />
+                <Icon.icon className="size-4" />
               </a>
             ))}
           </div>
@@ -103,7 +103,7 @@ export function Footer() {
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="size-4 text-brand-red" />
-              <span>+1 (800) 000-0000</span>
+              <span>+1 (251) 279-7481</span>
             </li>
             <li className="flex items-center gap-2.5">
               <MessageCircle className="size-4 text-brand-red" />
